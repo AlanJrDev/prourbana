@@ -1,0 +1,118 @@
+@property --bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(18.54% 0.028 258.29);
+}
+@property --surface {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(23.31% 0.035 257.67);
+}
+@property --surface-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(27.5% 0.038 257.5);
+}
+@property --fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(97.22% 0.003 247.86);
+}
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(74.57% 0.030 254.72);
+}
+@property --border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(28.24% 0.042 257.31);
+}
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(71.76% 0.080 69.13);
+}
+@property --accent-hover {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(63.76% 0.080 69.13);
+}
+@property --accent-strong {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(76.65% 0.139 91.06);
+}
+@property --on-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(16% 0.03 258);
+}
+
+:root {
+  --bg: oklch(18.54% 0.028 258.29);
+  --surface: oklch(23.31% 0.035 257.67);
+  --surface-2: oklch(27.5% 0.038 257.5);
+  --fg: oklch(97.22% 0.003 247.86);
+  --muted: oklch(74.57% 0.030 254.72);
+  --border: oklch(28.24% 0.042 257.31);
+  --accent: oklch(71.76% 0.080 69.13);
+  --accent-hover: oklch(63.76% 0.080 69.13);
+  --accent-strong: oklch(76.65% 0.139 91.06);
+  --on-accent: oklch(16% 0.03 258);
+  --cream: #f4f1ea;
+  --font-display: "Sora", system-ui, sans-serif;
+  --font-body: "Hanken Grotesk", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --max: 1160px;
+  --nav-h: 72px;
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out: var(--ease);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --motion-press: 160ms;
+  --motion-ui: 180ms;
+  --motion-reveal: 500ms;
+  --motion-theme: 420ms;
+  color-scheme: dark;
+  transition:
+    --bg var(--motion-theme) var(--ease),
+    --surface var(--motion-theme) var(--ease),
+    --surface-2 var(--motion-theme) var(--ease),
+    --fg var(--motion-theme) var(--ease),
+    --muted var(--motion-theme) var(--ease),
+    --border var(--motion-theme) var(--ease),
+    --accent var(--motion-theme) var(--ease),
+    --accent-hover var(--motion-theme) var(--ease),
+    --accent-strong var(--motion-theme) var(--ease),
+    --on-accent var(--motion-theme) var(--ease);
+}
+
+:root[data-theme="light"] {
+  --bg: oklch(96.8% 0.010 258);
+  --surface: oklch(99.3% 0.003 258);
+  --surface-2: oklch(93.5% 0.014 258);
+  --fg: oklch(18.54% 0.028 258.29);
+  --muted: oklch(45% 0.035 257);
+  --border: oklch(88% 0.020 258);
+  --accent: oklch(50% 0.100 69.13);
+  --accent-hover: oklch(43% 0.100 69.13);
+  --accent-strong: oklch(52% 0.120 85);
+  --on-accent: oklch(97.5% 0.015 90);
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+}

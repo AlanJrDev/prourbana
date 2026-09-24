@@ -1,0 +1,15 @@
+{
+  "name": "prourban",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Landing page PROURBANA — topografia, regularização fundiária e urbanismo",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.4.3"
+  }
+}

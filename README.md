@@ -1,6 +1,6 @@
 # PROURBANA — Projetos e Consultoria
 
-Landing page institucional da **PROURBANA**: topografia, regularização fundiária e urbanismo. Site estático em HTML, CSS e JavaScript — sem build, sem framework e sem backend.
+Landing page institucional da **PROURBANA**: topografia, regularização fundiária e urbanismo. Site estático com **Vite** (vanilla HTML/CSS/JS modular), sem framework e sem backend.
 
 **Repositório:** [github.com/AlanJrDev/prourbana](https://github.com/AlanJrDev/prourbana)
 
@@ -43,14 +43,35 @@ Público-alvo:
 
 ```
 prourban/
-├── index.html                 # Página completa (HTML + CSS + JS)
-├── assets/
-│   ├── hero-drone.mp4         # Vídeo de fundo do hero (loop)
-│   ├── hero-poster.jpg        # Frame estático / fallback do vídeo
-│   ├── prourban-mark.png      # Monograma (nav)
-│   ├── prourban-logo-full.png # Logo completo (rodapé)
-│   └── prourban-logo.jpeg     # Logo oficial de referência
-├── frames/                    # Frames originais do drone (fonte do vídeo)
+├── index.html                 # Markup (entra no build)
+├── package.json               # Scripts npm + devDependency: vite
+├── vite.config.js             # Config do bundler (base: "./")
+├── public/
+│   └── assets/                # Estáticos servidos sem transformação
+│       ├── hero-drone.mp4     # Vídeo de fundo do hero (boomerang)
+│       ├── hero-poster.jpg    # Frame estático / fallback do vídeo
+│       ├── prourban-mark.png  # Monograma (nav)
+│       ├── prourban-logo-full.png
+│       └── prourban-logo.jpeg
+├── src/
+│   ├── main.js                # Entrada: importa CSS + inicializa módulos
+│   ├── styles/
+│   │   ├── main.css           # Importa os módulos de estilo
+│   │   ├── tokens.css         # @property, OKLch, temas claro/escuro
+│   │   ├── base.css           # Reset, tipografia, utilitários, seções shared
+│   │   ├── nav.css            # Header e menu mobile
+│   │   ├── buttons.css        # Botões
+│   │   ├── hero.css           # Hero, vídeo e curvas
+│   │   ├── sections.css       # Bento, timeline, prova/FAQ, CTA, footer
+│   │   ├── motion.css         # Entradas, reveals, theme-toggle
+│   │   └── responsive.css     # Breakpoints
+│   └── scripts/
+│       ├── nav.js             # Scroll, menu mobile, ano do rodapé
+│       ├── theme.js           # Toggle de tema + View Transitions
+│       ├── hero-video.js      # Boomerang do vídeo
+│       └── reveal.js          # IntersectionObserver
+├── media/frames/              # Frames originais do drone (fonte do vídeo)
+├── .github/workflows/         # Deploy automático no GitHub Pages
 ├── .gitignore
 └── README.md
 ```
@@ -59,38 +80,35 @@ prourban/
 
 ## Como executar localmente
 
-Não há etapa de build. Basta servir a pasta raiz por HTTP (o vídeo e as fontes se comportam melhor via servidor do que com `file://`).
-
-**Python 3**
+Requisitos: **Node.js 18+**.
 
 ```bash
-cd prourban
-python -m http.server 8080
+npm install --include=dev
+npm run dev
 ```
 
-Abra [http://localhost:8080](http://localhost:8080).
+Abra a URL que o Vite imprimir (normalmente `http://localhost:5173`).
 
-**Node.js (npx)**
+Scripts disponíveis:
 
-```bash
-npx serve .
-```
-
-**VS Code**
-
-Use a extensão *Live Server* → *Go Live* na raiz do projeto.
+| Comando | O que faz |
+|---------|-----------|
+| `npm run dev` | Servidor de desenvolvimento com HMR |
+| `npm run build` | Build de produção em `dist/` |
+| `npm run preview` | Serve o `dist/` localmente |
 
 ---
 
 ## Como publicar (GitHub Pages)
 
-1. Push deste repositório no GitHub.
-2. Em **Settings → Pages**:
-   - **Source:** Deploy from a branch
-   - **Branch:** `main` / `/ (root)`
-3. Aguarde o deploy e acesse `https://alanjrdev.github.io/prourbana/`.
+O workflow **Deploy** em `.github/workflows/deploy.yml` faz o build e publica o `dist/` automaticamente a cada push em `main`.
 
-Alternativa com Actions: use qualquer workflow estático que publique a raiz do repositório.
+1. No GitHub: **Settings → Pages → Source → GitHub Actions**.
+2. Push em `main`.
+
+Alternativa manual (sem Actions): `npm run build` e publique a pasta `dist/` (por exemplo, na branch `gh-pages`).
+
+Site esperado: `https://alanjrdev.github.io/prourbana/`.
 
 ---
 
@@ -133,13 +151,13 @@ Todo o conteúdo em português está no próprio `index.html`. IDs de âncora:
 - Botão flutuante no canto inferior direito alterna o tema.
 - Preferência salva em `localStorage` (`prourban-theme`).
 - Padrão: **claro**.
-- Tokens de cor em OKLch no bloco `:root` e `:root[data-theme="light"]` de `index.html`.
+- Tokens de cor em OKLch em `src/styles/tokens.css` (`:root` e `:root[data-theme="light"]`).
 
 ### Vídeo do hero
 
-- Arquivo: `assets/hero-drone.mp4` (mudo, `playsinline`).
-- Comportamento **boomerang**: toca até o fim, reverte até o início e recomeça.
-- Fallback: `assets/hero-poster.jpg` enquanto o vídeo não inicia.
+- Arquivo: `public/assets/hero-drone.mp4` (mudo, `playsinline`).
+- Comportamento **boomerang** em `src/scripts/hero-video.js`: toca até o fim, reverte até o início e recomeça.
+- Fallback: `public/assets/hero-poster.jpg` enquanto o vídeo não inicia.
 - Em `prefers-reduced-motion: reduce` o autoplay é desativado.
 
 Para trocar o clipe, substitua o MP4 mantendo o mesmo caminho (ou atualize o `src` no `<video>`).
@@ -165,13 +183,14 @@ Para trocar o clipe, substitua o MP4 mantendo o mesmo caminho (ou atualize o `sr
 
 | Camada | Escolha |
 |--------|---------|
+| Build / dev server | Vite 6 |
 | Markup | HTML5 semântico |
-| Estilo | CSS moderno (custom properties, OKLch, `color-mix`) |
-| Comportamento | JavaScript vanilla (ES5+ compatível) |
+| Estilo | CSS modular (custom properties, OKLch, `color-mix`) |
+| Comportamento | JavaScript ES modules (vanilla) |
 | Tipografia | Google Fonts — Sora, Hanken Grotesk, IBM Plex Mono |
 | Mídia | MP4 local + poster JPEG |
 
-Sem dependências de runtime, sem npm install e sem etapa de build.
+Dependências de produção: **nenhuma**. Vite é a única devDependency.
 
 ---
 
@@ -203,8 +222,8 @@ Sem dependências de runtime, sem npm install e sem etapa de build.
 
 | Recurso | Origem |
 |---------|--------|
-| `assets/hero-drone.mp4` | Gravação própria (frames em `frames/`) |
-| `assets/hero-poster.jpg` | Frame extraído da gravação |
+| `public/assets/hero-drone.mp4` | Gravação própria (frames em `media/frames/`) |
+| `public/assets/hero-poster.jpg` | Frame extraído da gravação |
 | Logos PROURBANA | Material da marca |
 | Ícones | SVG inline (traço único) |
 

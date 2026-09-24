@@ -1,4 +1,10 @@
-# Dependências de sistema
+# Dependências
+node_modules/
+
+# Build
+dist/
+
+# Sistema
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -13,4 +19,3 @@ desktop.ini
 *.log
 *.tmp
 .cache/
-node_modules/
