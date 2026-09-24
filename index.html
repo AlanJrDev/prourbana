@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="PROURBANA — Topografia, Regularização Fundiária e Urbanismo. Precisão técnica para regularizar, planejar e valorizar seu imóvel." />
+  <title>PROURBANA — Topografia, Regularização e Urbanismo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    document.documentElement.classList.add("js");
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("prourban-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <style>
+    @property --bg {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(18.54% 0.028 258.29);
+    }
+    @property --surface {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(23.31% 0.035 257.67);
+    }
+    @property --surface-2 {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(27.5% 0.038 257.5);
+    }
+    @property --fg {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(97.22% 0.003 247.86);
+    }
+    @property --muted {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(74.57% 0.030 254.72);
+    }
+    @property --border {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(28.24% 0.042 257.31);
+    }
+    @property --accent {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(71.76% 0.080 69.13);
+    }
+    @property --accent-hover {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(63.76% 0.080 69.13);
+    }
+    @property --accent-strong {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(76.65% 0.139 91.06);
+    }
+    @property --on-accent {
+      syntax: "<color>";
+      inherits: true;
+      initial-value: oklch(16% 0.03 258);
+    }
+
+    :root {
+      --bg: oklch(18.54% 0.028 258.29);
+      --surface: oklch(23.31% 0.035 257.67);
+      --surface-2: oklch(27.5% 0.038 257.5);
+      --fg: oklch(97.22% 0.003 247.86);
+      --muted: oklch(74.57% 0.030 254.72);
+      --border: oklch(28.24% 0.042 257.31);
+      --accent: oklch(71.76% 0.080 69.13);
+      --accent-hover: oklch(63.76% 0.080 69.13);
+      --accent-strong: oklch(76.65% 0.139 91.06);
+      --on-accent: oklch(16% 0.03 258);
+      --cream: #f4f1ea;
+      --font-display: "Sora", system-ui, sans-serif;
+      --font-body: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --max: 1160px;
+      --nav-h: 72px;
+      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-out: var(--ease);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --motion-press: 160ms;
+      --motion-ui: 180ms;
+      --motion-reveal: 500ms;
+      --motion-theme: 420ms;
+      color-scheme: dark;
+      transition:
+        --bg var(--motion-theme) var(--ease),
+        --surface var(--motion-theme) var(--ease),
+        --surface-2 var(--motion-theme) var(--ease),
+        --fg var(--motion-theme) var(--ease),
+        --muted var(--motion-theme) var(--ease),
+        --border var(--motion-theme) var(--ease),
+        --accent var(--motion-theme) var(--ease),
+        --accent-hover var(--motion-theme) var(--ease),
+        --accent-strong var(--motion-theme) var(--ease),
+        --on-accent var(--motion-theme) var(--ease);
+    }
+
+    :root[data-theme="light"] {
+      --bg: oklch(96.8% 0.010 258);
+      --surface: oklch(99.3% 0.003 258);
+      --surface-2: oklch(93.5% 0.014 258);
+      --fg: oklch(18.54% 0.028 258.29);
+      --muted: oklch(45% 0.035 257);
+      --border: oklch(88% 0.020 258);
+      --accent: oklch(50% 0.100 69.13);
+      --accent-hover: oklch(43% 0.100 69.13);
+      --accent-strong: oklch(52% 0.120 85);
+      --on-accent: oklch(97.5% 0.015 90);
+      color-scheme: light;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        transition: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      caret-color: var(--accent);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) var(--bg);
+    }
+    ::selection { background: color-mix(in oklab, var(--accent) 45%, var(--bg)); color: var(--fg); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 999px;
+      border: 2px solid var(--bg);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: color-mix(in oklab, var(--muted) 45%, var(--border));
+    }
+    img, video { max-width: 100%; display: block; }
+    a { color: inherit; }
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: 0;
+      z-index: 200;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.65rem 1rem;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 0 0 10px 10px;
+      transform: translateY(calc(-100% - 8px));
+      transition: transform var(--motion-press) var(--ease);
+    }
+    .skip-link:focus { transform: none; }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
+    p { margin: 0; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: var(--max);
+      margin-inline: auto;
+      box-sizing: border-box;
+    }
+
+    /* ——— Nav ——— */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--motion-ui) var(--ease), background var(--motion-ui) var(--ease);
+      padding-inline: 1.25rem;
+      box-sizing: border-box;
+    }
+    .nav.is-scrolled {
+      border-bottom-color: var(--border);
+      background: var(--bg);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .nav:hover,
+      .nav.is-scrolled:hover {
+        background: var(--bg);
+        border-bottom-color: var(--border);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+    }
+    .nav__inner {
+      width: 100%;
+      max-width: var(--max);
+      margin-inline: auto;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav__brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+      min-height: 44px;
+    }
+    .nav__mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--cream);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+    .nav__mark img { width: 100%; height: 100%; object-fit: contain; }
+    .nav__word {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .nav__word strong {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+    }
+    .nav__word span {
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      margin-left: auto;
+    }
+    .nav__links a {
+      display: flex;
+      align-items: center;
+      padding: 0.55rem 0.85rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color var(--motion-press) var(--ease), background var(--motion-press) var(--ease);
+      min-height: 44px;
+    }
+    .nav__links a:hover { color: var(--fg); background: color-mix(in oklab, var(--surface) 80%, transparent); }
+    .nav__cta { margin-left: 0.5rem; }
+    .nav__toggle {
+      display: none;
+      margin-left: auto;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--fg);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ——— Buttons ——— */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 48px;
+      padding: 0.75rem 1.4rem;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background var(--motion-press) var(--ease), border-color var(--motion-press) var(--ease), transform var(--motion-press) var(--ease);
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn--primary {
+      background: var(--accent);
+      color: var(--on-accent);
+      border-color: var(--accent);
+    }
+    .btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn--ghost {
+      background: transparent;
+      color: var(--fg);
+      border-color: var(--border);
+    }
+    .btn--ghost:hover {
+      background: var(--surface);
+      border-color: color-mix(in oklab, var(--muted) 40%, var(--border));
+    }
+    .btn--lg { min-height: 54px; padding: 0.9rem 1.65rem; font-size: 1.05rem; }
+    .btn svg { flex-shrink: 0; }
+
+    /* ——— Hero ——— */
+    .hero {
+      position: relative;
+      min-height: min(100vh, 920px);
+      display: flex;
+      align-items: flex-end;
+      padding: calc(var(--nav-h) + 3rem) 1.25rem 4.5rem;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .hero__media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: var(--bg);
+    }
+    .hero__media video,
+    .hero__media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero__media video {
+      opacity: 0;
+      transition: opacity var(--motion-reveal) var(--ease);
+    }
+    .hero__media video.is-playing { opacity: 1; }
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, color-mix(in oklab, var(--bg) 42%, transparent) 0%, color-mix(in oklab, var(--bg) 50%, transparent) 45%, var(--bg) 100%),
+        linear-gradient(90deg, color-mix(in oklab, var(--bg) 76%, transparent) 0%, color-mix(in oklab, var(--bg) 32%, transparent) 50%, transparent 70%);
+      z-index: 1;
+    }
+    :root[data-theme="light"] .hero__overlay {
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in oklab, var(--bg) 34%, transparent) 0%,
+          color-mix(in oklab, var(--bg) 12%, transparent) 24%,
+          transparent 42%,
+          color-mix(in oklab, var(--bg) 32%, transparent) 80%,
+          var(--bg) 100%
+        ),
+        linear-gradient(
+          90deg,
+          color-mix(in oklab, var(--bg) 92%, transparent) 0%,
+          color-mix(in oklab, var(--bg) 88%, transparent) 32%,
+          color-mix(in oklab, var(--bg) 48%, transparent) 50%,
+          color-mix(in oklab, var(--bg) 10%, transparent) 66%,
+          transparent 80%
+        );
+    }
+    :root[data-theme="light"] .hero__contours {
+      opacity: 0.28;
+    }
+    :root[data-theme="light"] .nav__mark,
+    :root[data-theme="light"] .footer__logo {
+      border: 1px solid var(--border);
+    }
+    .hero__contours {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+    .hero__contours svg {
+      position: absolute;
+      right: -5%;
+      bottom: 0;
+      width: min(70vw, 900px);
+      height: auto;
+    }
+    .hero__contours path {
+      fill: none;
+      stroke: color-mix(in oklab, var(--accent) 55%, transparent);
+      stroke-width: 1.25;
+      stroke-dasharray: 1400;
+      stroke-dashoffset: 1400;
+      animation: draw-line 2.2s var(--ease) forwards;
+    }
+    .hero__contours path:nth-child(2) { animation-delay: 0.15s; stroke: color-mix(in oklab, var(--accent) 35%, transparent); }
+    .hero__contours path:nth-child(3) { animation-delay: 0.3s; }
+    .hero__contours path:nth-child(4) { animation-delay: 0.45s; stroke: color-mix(in oklab, var(--accent) 30%, transparent); }
+    .hero__contours path:nth-child(5) { animation-delay: 0.6s; }
+    @keyframes draw-line { to { stroke-dashoffset: 0; } }
+
+    .hero__content {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: var(--max);
+      margin-inline: auto;
+      box-sizing: border-box;
+    }
+    .hero__content h1 { max-width: 46rem; }
+    .hero h1 {
+      font-size: clamp(2.15rem, 4.6vw, 3.75rem);
+      font-weight: 700;
+      margin: 0 0 1.25rem;
+      letter-spacing: -0.035em;
+      line-height: 1.12;
+    }
+    .hero__lead {
+      font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+      color: var(--muted);
+      max-width: 40rem;
+      margin-bottom: 2rem;
+      line-height: 1.65;
+    }
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-bottom: 2.25rem;
+    }
+    .hero__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .hero__badges li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      background: color-mix(in oklab, var(--surface) 75%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .hero__badges svg { color: var(--accent); flex-shrink: 0; }
+
+    /* ——— Sections shared ——— */
+    section { scroll-margin-top: calc(var(--nav-h) + 12px); }
+    .section {
+      padding: 6rem 1.25rem;
+      box-sizing: border-box;
+    }
+    .section--tight { padding-block: 5rem; }
+    .section__head {
+      max-width: 40rem;
+      margin-bottom: 3rem;
+    }
+    .section__head h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      margin: 0 0 0.85rem;
+    }
+    .section__head p {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+    .section__head--center {
+      text-align: center;
+      margin-inline: auto;
+    }
+
+    /* ——— Bento / Soluções ——— */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+    .bento__card {
+      grid-column: span 6;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.75rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      transition: border-color var(--motion-ui) var(--ease), transform var(--motion-ui) var(--ease);
+      min-height: 100%;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .bento__card:hover {
+        border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+        transform: translateY(-3px);
+      }
+    }
+    .bento__card--wide { grid-column: span 7; }
+    .bento__card--narrow { grid-column: span 5; }
+    .bento__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: color-mix(in oklab, var(--bg) 55%, var(--surface));
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+    }
+    .bento__card h3 {
+      font-size: 1.25rem;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .bento__card p {
+      color: var(--muted);
+      font-size: 1rem;
+      flex: 1;
+    }
+    .bento__tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: color-mix(in oklab, var(--accent) 80%, var(--fg));
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ——— Diferencial ——— */
+    .diff {
+      background: linear-gradient(180deg, var(--bg) 0%, color-mix(in oklab, var(--surface) 55%, var(--bg)) 50%, var(--bg) 100%);
+      border-block: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      padding-inline: 1.25rem;
+      box-sizing: border-box;
+    }
+    .diff__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .diff__visual {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 16 / 11;
+      background: var(--surface);
+    }
+    .diff__visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .diff__visual-caption {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      right: 1rem;
+      padding: 0.75rem 1rem;
+      background: color-mix(in oklab, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .diff__visual-caption i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .diff__list {
+      list-style: none;
+      margin: 1.5rem 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+    .diff__list li {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    .diff__list .num {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      width: 44px;
+      height: 44px;
+      border: 1px solid color-mix(in oklab, var(--accent) 40%, var(--border));
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: color-mix(in oklab, var(--bg) 40%, var(--surface));
+    }
+    .diff__list h3 { font-size: 1.1rem; margin: 0 0 0.25rem; }
+    .diff__list p { color: var(--muted); font-size: 0.98rem; }
+
+    /* ——— Timeline ——— */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      position: relative;
+      counter-reset: step;
+    }
+    .steps::before {
+      content: "";
+      position: absolute;
+      top: 36px;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border) 15%, var(--border) 85%, transparent);
+      z-index: 0;
+    }
+    .steps__item {
+      position: relative;
+      z-index: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .steps__dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: grid;
+      place-items: center;
+      margin-bottom: 0.35rem;
+    }
+    .steps__item h3 { font-size: 1.05rem; margin: 0; }
+    .steps__item p { color: var(--muted); font-size: 0.95rem; }
+
+    /* ——— Público ——— */
+    .audience {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .audience__card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.25rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--motion-ui) var(--ease);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .audience__card:hover {
+        border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+      }
+    }
+    .audience__label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+    .audience__card h3 { font-size: 1.45rem; margin: 0; }
+    .audience__card > p { color: var(--muted); }
+    .audience__card ul {
+      list-style: none;
+      margin: 0.5rem 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .audience__card li {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      font-size: 0.98rem;
+      color: var(--fg);
+    }
+    .audience__card li svg {
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    /* ——— Prova + FAQ ——— */
+    .proof-faq {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .quotes {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .quote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.4rem 1.25rem;
+    }
+    .quote__badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: color-mix(in oklab, var(--accent) 75%, var(--fg));
+      border: 1px dashed color-mix(in oklab, var(--accent) 45%, var(--border));
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      margin-bottom: 0.85rem;
+    }
+    .quote blockquote {
+      margin: 0 0 0.85rem;
+      font-size: 1.02rem;
+      line-height: 1.55;
+      color: var(--fg);
+    }
+    .quote figcaption {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .quote figcaption strong { color: var(--fg); font-weight: 600; display: block; }
+
+    .faq { display: flex; flex-direction: column; gap: 0.65rem; }
+    .faq details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .faq details[open] { border-color: color-mix(in oklab, var(--accent) 30%, var(--border)); }
+    .faq summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 1.1rem 1.25rem;
+      font-weight: 600;
+      font-size: 1.02rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 52px;
+      font-family: var(--font-display);
+      letter-spacing: -0.015em;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      transform: rotate(45deg) translateY(-3px);
+      transition: transform var(--motion-ui) var(--ease);
+      flex-shrink: 0;
+    }
+    .faq details[open] summary::after {
+      transform: rotate(225deg) translateY(-3px);
+    }
+    .faq__body {
+      padding: 0 1.25rem 1.2rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    /* ——— CTA final ——— */
+    .final-cta {
+      position: relative;
+      padding: 6.5rem 1.25rem;
+      box-sizing: border-box;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 70% at 70% 40%, color-mix(in oklab, var(--surface) 90%, var(--accent) 8%), transparent 70%),
+        linear-gradient(165deg, var(--surface) 0%, var(--bg) 55%, color-mix(in oklab, var(--bg) 85%, var(--accent) 6%) 100%);
+      border-block: 1px solid var(--border);
+    }
+    .final-cta__contours {
+      position: absolute;
+      inset: 0;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .final-cta__contours svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .final-cta__contours path {
+      fill: none;
+      stroke: color-mix(in oklab, var(--accent) 40%, transparent);
+      stroke-width: 1;
+    }
+    .final-cta__inner {
+      position: relative;
+      z-index: 1;
+      max-width: 40rem;
+      text-align: center;
+      margin-inline: auto;
+    }
+    .final-cta h2 {
+      font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+      margin: 0 0 1rem;
+    }
+    .final-cta p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ——— Footer ——— */
+    .footer {
+      padding: 3.5rem 1.25rem 2rem;
+      box-sizing: border-box;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+    .footer__logo {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .footer__logo img { width: 200px; height: auto; }
+    .footer__about { color: var(--muted); font-size: 0.95rem; max-width: 28rem; }
+    .footer h3 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      margin: 0 0 1rem;
+      letter-spacing: 0.02em;
+    }
+    .footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+    .footer a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color var(--motion-press) var(--ease);
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .footer a:hover { color: var(--fg); }
+    .footer__bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    .footer__pillars {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .footer__pillars em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* ——— Motion ——— */
+    .hero__content > * {
+      opacity: 1;
+      transform: none;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .hero__content > * {
+        animation: hero-in 0.55s var(--ease) both;
+      }
+      .hero__content > *:nth-child(1) { animation-delay: 0.06s; }
+      .hero__content > *:nth-child(2) { animation-delay: 0.12s; }
+      .hero__content > *:nth-child(3) { animation-delay: 0.18s; }
+      .hero__content > *:nth-child(4) { animation-delay: 0.24s; }
+      .bento .reveal:nth-child(1) { transition-delay: 0ms; }
+      .bento .reveal:nth-child(2) { transition-delay: 60ms; }
+      .bento .reveal:nth-child(3) { transition-delay: 120ms; }
+      .bento .reveal:nth-child(4) { transition-delay: 180ms; }
+      .steps .reveal:nth-child(1) { transition-delay: 0ms; }
+      .steps .reveal:nth-child(2) { transition-delay: 60ms; }
+      .steps .reveal:nth-child(3) { transition-delay: 120ms; }
+      .steps .reveal:nth-child(4) { transition-delay: 180ms; }
+    }
+    @keyframes hero-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .reveal { opacity: 1; transform: none; }
+    html.js .reveal {
+      transition: opacity var(--motion-reveal) var(--ease), transform var(--motion-reveal) var(--ease);
+    }
+    html.js .reveal:not(.is-in) {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      html.js .reveal,
+      html.js .reveal:not(.is-in) {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .hero__content > * { animation: none !important; }
+      .hero__contours path { animation: none; stroke-dashoffset: 0; }
+      .hero__media video { transition: opacity var(--motion-ui) linear; }
+      .skip-link { transition: none; }
+      html { scroll-behavior: auto; }
+      .btn:active { transform: none; }
+      .bento__card,
+      .audience__card,
+      .faq summary::after,
+      .nav,
+      .nav__links,
+      .nav__links a,
+      .footer a,
+      .btn {
+        transition: none;
+      }
+      .nav__links {
+        transform: none !important;
+      }
+    }
+
+    /* ——— Theme toggle (floating) ——— */
+    .theme-toggle {
+      position: fixed;
+      right: 1.15rem;
+      bottom: 1.15rem;
+      z-index: 90;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: color-mix(in oklab, var(--surface) 90%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--accent);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition:
+        transform var(--motion-press) var(--ease),
+        border-color var(--motion-ui) var(--ease),
+        background var(--motion-ui) var(--ease),
+        color var(--motion-ui) var(--ease);
+    }
+    .theme-toggle:hover {
+      border-color: color-mix(in oklab, var(--accent) 40%, var(--border));
+    }
+    .theme-toggle:active {
+      transform: scale(0.97);
+    }
+    .theme-toggle__icons {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+    }
+    .theme-toggle__icon {
+      grid-area: 1 / 1;
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      transition:
+        opacity 280ms var(--ease),
+        transform 280ms var(--ease);
+    }
+    .theme-toggle__icon--moon {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+    .theme-toggle__icon--sun {
+      opacity: 0;
+      transform: rotate(-90deg) scale(0.7);
+    }
+    :root[data-theme="light"] .theme-toggle__icon--moon {
+      opacity: 0;
+      transform: rotate(90deg) scale(0.7);
+    }
+    :root[data-theme="light"] .theme-toggle__icon--sun {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+    :root[data-theme="light"] .theme-toggle {
+      background: color-mix(in oklab, var(--surface) 94%, transparent);
+    }
+    @media (max-width: 720px) {
+      .theme-toggle {
+        right: 0.9rem;
+        bottom: 0.9rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .theme-toggle,
+      .theme-toggle__icon {
+        transition: none;
+      }
+      .theme-toggle:active {
+        transform: none;
+      }
+    }
+
+    /* ——— Responsive ——— */
+    @media (max-width: 960px) {
+      .bento__card,
+      .bento__card--wide,
+      .bento__card--narrow { grid-column: span 6; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .steps::before { display: none; }
+      .diff__grid { grid-template-columns: 1fr; gap: 2rem; }
+      .proof-faq { grid-template-columns: 1fr; }
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .nav__links {
+        display: flex;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        background: color-mix(in oklab, var(--bg) 96%, transparent);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 1.25rem 1.25rem;
+        gap: 0.25rem;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition:
+          opacity var(--motion-ui) var(--ease),
+          transform var(--motion-ui) var(--ease),
+          visibility var(--motion-ui);
+      }
+      .nav__links.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+      }
+      .nav__links .nav__cta { margin: 0.5rem 0 0; }
+      .nav__links .nav__cta .btn { width: 100%; }
+      .nav__toggle { display: inline-flex; }
+      .nav__word span { display: none; }
+      .bento { grid-template-columns: 1fr; }
+      .bento__card,
+      .bento__card--wide,
+      .bento__card--narrow { grid-column: span 1; }
+      .steps { grid-template-columns: 1fr; }
+      .audience { grid-template-columns: 1fr; }
+      .footer__grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero { min-height: auto; padding-bottom: 3.5rem; align-items: center; }
+      .hero__actions { flex-direction: column; align-items: stretch; }
+      .hero__actions .btn { width: 100%; }
+      .section { padding-block: 4rem; }
+      .final-cta { padding-block: 4.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
+  <header class="nav" id="topo">
+    <div class="nav__inner">
+      <a class="nav__brand" href="#topo" aria-label="PROURBANA — início">
+        <span class="nav__mark" aria-hidden="true">
+          <img src="assets/prourban-mark.png" alt="" width="375" height="378" />
+        </span>
+        <span class="nav__word">
+          <strong>PROURBANA</strong>
+          <span>Projetos e Consultoria</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu" data-nav-toggle>
+        <span class="sr-only">Abrir menu</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <ul class="nav__links" id="nav-menu">
+        <li><a href="#solucoes">Soluções</a></li>
+        <li><a href="#tecnologia">Tecnologia</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li class="nav__cta">
+          <a class="btn btn--ghost" href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20quero%20falar%20com%20um%20especialista%20da%20PROURBANA." target="_blank" rel="noopener noreferrer">
+            WhatsApp
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__media" aria-hidden="true">
+        <img
+          class="hero__poster"
+          src="assets/hero-poster.jpg"
+          alt=""
+          width="1280"
+          height="720"
+          decoding="async"
+        />
+        <video
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="assets/hero-poster.jpg"
+          width="1280"
+          height="720"
+          data-hero-video
+        >
+          <source src="assets/hero-drone.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="hero__overlay" aria-hidden="true"></div>
+      <div class="hero__contours" aria-hidden="true">
+        <svg viewBox="0 0 900 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 580 C160 520, 220 470, 340 460 C480 448, 520 380, 640 360 C760 340, 820 280, 880 200" />
+          <path d="M20 520 C140 470, 240 430, 360 420 C500 408, 560 340, 680 320 C780 304, 840 250, 890 170" />
+          <path d="M60 610 C180 560, 260 510, 380 500 C520 488, 580 420, 700 400 C800 384, 860 330, 900 260" />
+          <path d="M100 470 C200 430, 300 400, 420 390 C540 380, 600 310, 720 290 C810 274, 860 230, 900 160" />
+          <path d="M140 420 C240 390, 340 370, 450 360 C570 348, 630 280, 740 260 C820 246, 870 210, 900 150" />
+        </svg>
+      </div>
+
+      <div class="hero__content">
+        <h1 id="hero-title">Precisão técnica para regularizar, planejar e valorizar seu imóvel.</h1>
+        <p class="hero__lead">
+          Soluções completas em Topografia, Regularização Fundiária e Urbanismo para proprietários, construtoras e investidores.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20quero%20falar%20com%20um%20especialista%20da%20PROURBANA." target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Falar com um Especialista
+          </a>
+          <a class="btn btn--ghost btn--lg" href="#solucoes">Conhecer Serviços</a>
+        </div>
+        <ul class="hero__badges">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            Atendimento técnico especializado
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            Projetos em conformidade ABNT/INCRA
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    
+    <section class="section" id="solucoes" aria-labelledby="solucoes-title">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <h2 id="solucoes-title">O que você precisa resolver?</h2>
+          <p>Quatro frentes de atuação cobrem o ciclo completo do imóvel: do levantamento de campo à entrega cartorária.</p>
+        </header>
+
+        <div class="bento">
+          <article class="bento__card bento__card--wide reveal">
+            <div class="bento__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17c3-1 4-5 7-5s3 3 6 2 3-4 5-5"/><path d="M3 21c3-1 4-5 7-5s3 3 6 2 3-4 5-5"/><circle cx="8" cy="7" r="2"/><path d="M8 9v3"/></svg>
+            </div>
+            <span class="bento__tag">Campo &amp; medição</span>
+            <h3>Topografia &amp; Agrimensura</h3>
+            <p>Levantamento planialtimétrico, georreferenciamento de imóveis rurais e urbanos, demarcação de lotes e plantas para projeto e obra, com equipamentos de alta precisão.</p>
+          </article>
+
+          <article class="bento__card bento__card--narrow reveal">
+            <div class="bento__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+            </div>
+            <span class="bento__tag">Documentação</span>
+            <h3>Regularização Imobiliária</h3>
+            <p>Usucapião, desmembramento, remembramento e retificação de área com condução junto a cartórios e órgãos competentes.</p>
+          </article>
+
+          <article class="bento__card bento__card--narrow reveal">
+            <div class="bento__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg>
+            </div>
+            <span class="bento__tag">Planejamento</span>
+            <h3>Projetos de Urbanismo</h3>
+            <p>Loteamentos, parcelamento do solo e estudos de viabilidade técnica para tirar o terreno do papel com segurança jurídica.</p>
+          </article>
+
+          <article class="bento__card bento__card--wide reveal">
+            <div class="bento__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h16"/><path d="M6 20V10l6-4 6 4v10"/><path d="M10 20v-5h4v5"/><path d="M3 10l9-6 9 6"/></svg>
+            </div>
+            <span class="bento__tag">Obra &amp; controle</span>
+            <h3>Acompanhamento de Obras</h3>
+            <p>Levantamento cadastral (As-Built), nivelamento e locação de obras para manter o construído alinhado ao projeto aprovado, reduzindo retrabalho e não conformidades.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="section diff" id="tecnologia" aria-labelledby="tecnologia-title">
+      <div class="wrap">
+        <div class="diff__grid">
+          <div class="diff__visual reveal">
+            <img src="assets/hero-poster.jpg" alt="Vista aérea de drone sobre loteamento em fase de urbanização" width="1280" height="720" loading="lazy" />
+            <div class="diff__visual-caption">
+              <i aria-hidden="true"></i>
+              Levantamento aéreo · precisão de campo para decisão de projeto
+            </div>
+          </div>
+          <div class="reveal">
+            <header class="section__head" style="margin-bottom:0">
+              <h2 id="tecnologia-title">Tecnologia a serviço do terreno</h2>
+              <p>Do voo ao memorial descritivo: precisão mensurável e entrega sem rodeios.</p>
+            </header>
+            <ul class="diff__list">
+              <li>
+                <span class="num" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 10v4"/><circle cx="12" cy="14" r="2"/><path d="M5 7l3 3M19 7l-3 3M5 7h4M15 7h4M5 7v4M19 7v4"/><circle cx="5" cy="4" r="2"/><circle cx="19" cy="4" r="2"/></svg>
+                </span>
+                <div>
+                  <h3>Drones e GPS RTK</h3>
+                  <p>Levantamentos com drones e receptores GPS RTK de alta precisão: mais cobertura em menos tempo, com dado confiável para projeto.</p>
+                </div>
+              </li>
+              <li>
+                <span class="num" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                </span>
+                <div>
+                  <h3>Agilidade na entrega</h3>
+                  <p>Relatórios técnicos, plantas e memoriais organizados para você aprovar e construir sem espera desnecessária.</p>
+                </div>
+              </li>
+              <li>
+                <span class="num" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+                </span>
+                <div>
+                  <h3>Conformidade simplificada</h3>
+                  <p>Condução jurídica e cartorária com documentos alinhados a normas ABNT e exigências de órgãos como o INCRA.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="section" id="como-funciona" aria-labelledby="como-funciona-title">
+      <div class="wrap">
+        <header class="section__head section__head--center reveal">
+          <h2 id="como-funciona-title">Como funciona o atendimento</h2>
+          <p>Um caminho linear: do diagnóstico à entrega, sem surpresa no meio do processo.</p>
+        </header>
+
+        <ol class="steps">
+          <li class="steps__item reveal">
+            <span class="steps__dot">1</span>
+            <h3>Diagnóstico inicial</h3>
+            <p>Análise preliminar da documentação e da área para mapear pendências e o caminho legal.</p>
+          </li>
+          <li class="steps__item reveal">
+            <span class="steps__dot">2</span>
+            <h3>Levantamento de campo</h3>
+            <p>Medição técnica com equipamentos de alta precisão: dron, GPS RTK e instrumentos topográficos.</p>
+          </li>
+          <li class="steps__item reveal">
+            <span class="steps__dot">3</span>
+            <h3>Processamento &amp; projeto</h3>
+            <p>Elaboração de plantas, memoriais descritivos e laudos prontos para instruir o processo.</p>
+          </li>
+          <li class="steps__item reveal">
+            <span class="steps__dot">4</span>
+            <h3>Aprovação &amp; entrega</h3>
+            <p>Acompanhamento junto aos órgãos públicos e cartórios até a conclusão efetiva.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    
+    <section class="section section--tight" id="publico" aria-labelledby="publico-title" style="background: color-mix(in oklab, var(--surface) 28%, var(--bg)); border-block: 1px solid var(--border);">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <h2 id="publico-title">Para quem trabalhamos</h2>
+          <p>Comunicação e escopo distintos para quem decide o imóvel e para quem executa o projeto.</p>
+        </header>
+
+        <div class="audience">
+          <article class="audience__card reveal">
+            <span class="audience__label">Proprietários individuais</span>
+            <h3>Regularizar para viver, vender ou investir</h3>
+            <p>Quando a escritura, as divisas ou a documentação travam o próximo passo do imóvel.</p>
+            <ul>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                Regularizar escritura e retificar área
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                Resolver disputas de divisas com levantamento técnico
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                Vender terrenos sem pendências
+              </li>
+            </ul>
+          </article>
+
+          <article class="audience__card reveal">
+            <span class="audience__label">Engenheiros, arquitetos e construtoras</span>
+            <h3>Parceiro de topografia para viabilizar projeto e obra</h3>
+            <p>Quando o cronograma exige dado de campo confiável e prazo de resposta curto.</p>
+            <ul>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                Base planialtimétrica precisa para projeto executivo
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                Locação, nivelamento e As-Built em obra
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                Georreferenciamento e suporte a aprovação
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="proof-faq">
+          <div class="reveal">
+            <header class="section__head">
+              <h2>Quem passou por aqui</h2>
+              <p>Espaço para avaliações de clientes atendidos. O conteúdo abaixo é exemplo e deve ser substituído.</p>
+            </header>
+            <div class="quotes">
+              <figure class="quote">
+                <span class="quote__badge">Depoimento de exemplo</span>
+                <blockquote>“O levantamento saiu no prazo e a planta resolveu a divergência de divisa que travava a venda do terreno.”</blockquote>
+                <figcaption><strong>Nome do cliente</strong>Proprietário · Regularização de área</figcaption>
+              </figure>
+              <figure class="quote">
+                <span class="quote__badge">Depoimento de exemplo</span>
+                <blockquote>“Base topográfica limpa e comunicativa: entramos na obra sem retrabalho de locação.”</blockquote>
+                <figcaption><strong>Nome do escritório</strong>Construtora · Acompanhamento de obras</figcaption>
+              </figure>
+              <figure class="quote">
+                <span class="quote__badge">Depoimento de exemplo</span>
+                <blockquote>“Do diagnóstico à entrega no cartório, soube sempre em que pé estava o processo.”</blockquote>
+                <figcaption><strong>Nome do cliente</strong>Proprietário rural · Georreferenciamento</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <header class="section__head">
+              <h2 id="faq-title">Perguntas frequentes</h2>
+              <p>Respostas diretas às dúvidas mais comuns antes do primeiro contato.</p>
+            </header>
+            <div class="faq">
+              <details>
+                <summary>Quanto tempo leva um levantamento topográfico?</summary>
+                <div class="faq__body">
+                  Depende da extensão da área, do tipo de levantamento e da acessibilidade do terreno. Após o diagnóstico inicial, apresentamos prazo estimado de campo e de entrega dos documentos, sem compromisso genérico antes de conhecer o caso.
+                </div>
+              </details>
+              <details>
+                <summary>O que é necessário para regularizar um imóvel?</summary>
+                <div class="faq__body">
+                  Em linhas gerais: documentos de identificação do imóvel e do proprietário, histórico de posse ou escrituras anteriores e, quando houver, matrícula atualizada. No diagnóstico inicial indicamos o que já serve e o que precisa ser obtido ou retificado.
+                </div>
+              </details>
+              <details>
+                <summary>Vocês atendem áreas rurais e urbanas?</summary>
+                <div class="faq__body">
+                  Sim. Atuamos em imóveis urbanos e rurais, incluindo georreferenciamento, demarcação, loteamentos e regularização, com a mesma base técnica e condutora cartorária.
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="final-cta" id="contato" aria-labelledby="cta-final-title">
+      <div class="final-cta__contours" aria-hidden="true">
+        <svg viewBox="0 0 1440 480" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <path d="M-20 400 C180 360, 320 300, 520 290 C760 278, 880 200, 1100 190 C1280 182, 1380 120, 1460 60"/>
+          <path d="M-20 440 C200 400, 360 340, 560 330 C800 318, 920 240, 1140 230 C1300 222, 1400 160, 1460 100"/>
+          <path d="M-20 360 C160 320, 300 260, 500 250 C740 238, 860 160, 1080 150 C1260 142, 1360 80, 1460 20"/>
+          <path d="M-20 320 C140 280, 280 220, 480 210 C720 198, 840 120, 1060 110 C1240 102, 1340 40, 1460 -20"/>
+          <path d="M-20 480 C220 440, 400 380, 600 370 C840 358, 960 280, 1180 270 C1340 262, 1420 200, 1460 140"/>
+        </svg>
+      </div>
+      <div class="wrap">
+        <div class="final-cta__inner reveal">
+          <h2 id="cta-final-title">Tem um imóvel, terreno ou projeto e não sabe por onde começar?</h2>
+          <p>Conte o seu caso. Um especialista PROURBANA avalia o cenário e indica o próximo passo técnico.</p>
+          <a class="btn btn--primary btn--lg" href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20quero%20um%20or%C3%A7amento%20gratuito%20da%20PROURBANA." target="_blank" rel="noopener noreferrer">
+            Solicitar Orçamento Gratuito
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo">
+            <img src="assets/prourban-logo-full.png" alt="PROURBANA — Projetos e Consultoria. Topografia, Regularização, Urbanismo." width="931" height="735" loading="lazy" />
+          </div>
+          <p class="footer__about">
+            Projetos e consultoria em topografia, regularização fundiária e urbanismo: precisão de campo com condução documental até a entrega.
+          </p>
+        </div>
+        <div>
+          <h3>Soluções</h3>
+          <ul>
+            <li><a href="#solucoes">Topografia &amp; Agrimensura</a></li>
+            <li><a href="#solucoes">Regularização Imobiliária</a></li>
+            <li><a href="#solucoes">Projetos de Urbanismo</a></li>
+            <li><a href="#solucoes">Acompanhamento de Obras</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Navegação</h3>
+          <ul>
+            <li><a href="#tecnologia">Tecnologia</a></li>
+            <li><a href="#como-funciona">Como funciona</a></li>
+            <li><a href="#publico">Para quem trabalhamos</a></li>
+            <li><a href="#faq">Perguntas frequentes</a></li>
+            <li>
+              <a href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20quero%20falar%20com%20um%20especialista%20da%20PROURBANA." target="_blank" rel="noopener noreferrer">
+                Falar no WhatsApp
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© <span id="year">2026</span> PROURBANA — Projetos e Consultoria</span>
+        <span class="footer__pillars">Topografia <em>·</em> Regularização <em>·</em> Urbanismo</span>
+      </div>
+    </div>
+  </footer>
+
+  <button
+    type="button"
+    class="theme-toggle"
+    data-theme-toggle
+    aria-label="Ativar modo escuro"
+    title="Alternar tema"
+  >
+    <span class="theme-toggle__icons" aria-hidden="true">
+      <span class="theme-toggle__icon theme-toggle__icon--moon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 14.5A8.5 8.5 0 019.5 3a7 7 0 100 14 8.48 8.48 0 0011.5-2.5z"/></svg>
+      </span>
+      <span class="theme-toggle__icon theme-toggle__icon--sun">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </span>
+    </span>
+  </button>
+
+  <script>
+    (function () {
+      var nav = document.querySelector(".nav");
+      var toggle = document.querySelector("[data-nav-toggle]");
+      var menu = document.getElementById("nav-menu");
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function onScroll() {
+        if (!nav) return;
+        nav.classList.toggle("is-scrolled", window.scrollY > 8);
+      }
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      function setMenuOpen(open) {
+        if (!toggle || !menu) return;
+        menu.classList.toggle("is-open", open);
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+        var sr = toggle.querySelector(".sr-only");
+        if (sr) sr.textContent = open ? "Fechar menu" : "Abrir menu";
+      }
+
+      if (toggle && menu) {
+        toggle.addEventListener("click", function () {
+          setMenuOpen(!menu.classList.contains("is-open"));
+        });
+        menu.querySelectorAll("a").forEach(function (link) {
+          link.addEventListener("click", function () {
+            setMenuOpen(false);
+          });
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && menu.classList.contains("is-open")) {
+            setMenuOpen(false);
+            toggle.focus();
+          }
+        });
+      }
+
+      var year = document.getElementById("year");
+      if (year) year.textContent = String(new Date().getFullYear());
+
+      var themeToggle = document.querySelector("[data-theme-toggle]");
+      function currentTheme() {
+        return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+      }
+      function syncThemeToggle() {
+        if (!themeToggle) return;
+        var light = currentTheme() === "light";
+        themeToggle.setAttribute("aria-label", light ? "Ativar modo escuro" : "Ativar modo claro");
+        themeToggle.setAttribute("title", light ? "Modo claro" : "Modo escuro");
+      }
+      syncThemeToggle();
+
+      function applyTheme(next) {
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem("prourban-theme", next); } catch (e) {}
+        syncThemeToggle();
+      }
+
+      if (themeToggle) {
+        themeToggle.addEventListener("click", function (event) {
+          var next = currentTheme() === "light" ? "dark" : "light";
+          var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          var rect = themeToggle.getBoundingClientRect();
+          var x = rect.left + rect.width / 2;
+          var y = rect.top + rect.height / 2;
+          var radius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          );
+
+          if (!reduce && typeof document.startViewTransition === "function") {
+            var rootEl = document.documentElement;
+            var vt = document.startViewTransition(function () {
+              rootEl.style.transition = "none";
+              applyTheme(next);
+            });
+            vt.ready.then(function () {
+              document.documentElement.animate(
+                [
+                  { clipPath: "circle(0px at " + x + "px " + y + "px)" },
+                  { clipPath: "circle(" + radius + "px at " + x + "px " + y + "px)" }
+                ],
+                {
+                  duration: 480,
+                  easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+                  pseudoElement: "::view-transition-new(root)"
+                }
+              );
+            }).catch(function () {}).then(function () {
+              rootEl.style.transition = "";
+            });
+            return;
+          }
+
+          applyTheme(next);
+          if (!reduce && typeof document.body.animate === "function") {
+            document.body.animate(
+              [{ opacity: 0.82 }, { opacity: 1 }],
+              { duration: 240, easing: "cubic-bezier(0.23, 1, 0.32, 1)" }
+            );
+          }
+        });
+      }
+
+      var video = document.querySelector("[data-hero-video]");
+      if (video) {
+        if (reduceMotion) {
+          video.removeAttribute("autoplay");
+          video.removeAttribute("loop");
+          video.loop = false;
+          video.pause();
+        } else {
+          var markPlaying = function () {
+            video.classList.add("is-playing");
+          };
+          if (video.readyState >= 3) markPlaying();
+          video.addEventListener("canplay", markPlaying);
+          video.addEventListener("playing", markPlaying);
+          video.addEventListener("error", function () {
+            video.classList.remove("is-playing");
+          });
+
+          video.loop = false;
+          video.removeAttribute("loop");
+
+          /* Boomerang: forward to end → reverse to start → forward again */
+          var boomDir = 1;
+          var boomStepping = false;
+
+          var boomPlayForward = function () {
+            boomDir = 1;
+            var p = video.play();
+            if (p && typeof p.catch === "function") p.catch(function () {});
+          };
+
+          var boomBeginReverse = function () {
+            if (boomDir !== 1) return;
+            boomDir = -1;
+            video.pause();
+            if (video.duration && isFinite(video.duration)) {
+              video.currentTime = Math.max(0, video.duration - 1 / 30);
+            }
+          };
+
+          var boomReverseStep = function () {
+            if (boomDir !== -1 || boomStepping || video.seeking) return;
+            var t = video.currentTime - 1 / 30;
+            if (t <= 0) {
+              boomDir = 1;
+              video.currentTime = 0;
+              boomPlayForward();
+              return;
+            }
+            boomStepping = true;
+            video.currentTime = t;
+          };
+
+          video.addEventListener("seeked", function () {
+            boomStepping = false;
+            if (boomDir === -1) boomReverseStep();
+          });
+
+          video.addEventListener("ended", function () {
+            boomBeginReverse();
+          });
+
+          var boomWatch = function () {
+            if (
+              boomDir === 1 &&
+              video.duration &&
+              isFinite(video.duration) &&
+              video.currentTime >= video.duration - 0.04
+            ) {
+              boomBeginReverse();
+            }
+            requestAnimationFrame(boomWatch);
+          };
+
+          boomPlayForward();
+          requestAnimationFrame(boomWatch);
+        }
+      }
+
+      var reveals = document.querySelectorAll(".reveal");
+      if (!reduceMotion && "IntersectionObserver" in window) {
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add("is-in");
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.15 }
+        );
+        reveals.forEach(function (el) { io.observe(el); });
+      } else {
+        reveals.forEach(function (el) { el.classList.add("is-in"); });
+      }
+    })();
+  </script>
+</body>
+</html>
