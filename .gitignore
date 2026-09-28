@@ -1,21 +1,19 @@
-# Dependências
 node_modules/
-
-# Build
 dist/
-
-# Sistema
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*~
-
-# Logs e temporários
+coverage/
 *.log
-*.tmp
-.cache/
+.DS_Store
+
+# saídas de teste/inspeção
+test-results/
+playwright-report/
+smoke-shots/
+prints/
+
+# material de trabalho (fontes e extrações — não vai ao repositório)
+framesinicial/
+framesrural/
+images/
+infoServicesClient/
+logo e letreiro/
+video-source/
