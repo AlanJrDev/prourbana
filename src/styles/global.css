@@ -1565,7 +1565,7 @@ p {
 
 .footer__top {
   display: grid;
-  grid-template-columns: 1fr 1.6fr 0.9fr;
+  grid-template-columns: 1fr 1.6fr;
   gap: clamp(2rem, 5vw, 4rem);
   padding-bottom: var(--space-6);
   border-bottom: var(--border-light);
@@ -1611,16 +1611,6 @@ p {
   font-size: var(--step--1);
   padding-block: 0.32rem;
   color: rgba(245, 241, 234, 0.66);
-}
-
-.footer__areas li {
-  color: var(--copper-400);
-}
-
-.footer__availability {
-  margin-top: var(--space-2);
-  font-size: var(--step--1);
-  color: rgba(245, 241, 234, 0.55);
 }
 
 .footer__nav {

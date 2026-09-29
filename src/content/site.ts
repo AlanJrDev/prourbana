@@ -179,7 +179,6 @@ export const contact = {
 } as const
 
 export const footer = {
-  areas: ['Brasília — DF', 'Goiás', 'Minas Gerais', 'Brasil todo (remoto)'],
   columns: [
     {
       title: 'Projetos',

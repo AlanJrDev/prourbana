@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ArrowUp } from 'lucide-react'
-import { brand, contact, footer, nav, whatsapp } from '@/content/site'
+import { brand, footer, nav, whatsapp } from '@/content/site'
 import { scrollToSection, scrollToTop } from '@/lib/lenis'
 
 export function Footer() {
@@ -33,16 +33,6 @@ export function Footer() {
             </div>
           ))}
         </nav>
-
-        <div className="footer__areas">
-          <h3>Áreas de atendimento</h3>
-          <ul>
-            {footer.areas.map((area) => (
-              <li key={area}>{area}</li>
-            ))}
-          </ul>
-          <p className="footer__availability">{contact.availability}</p>
-        </div>
       </div>
 
       <div className="footer__nav container">
