@@ -40,7 +40,7 @@ export const whatsapp = {
   display: '(61) 99688-9595',
   message: 'Olá! Vim pelo site da Prourbana e gostaria de um orçamento.',
   /** rótulo do botão flutuante (canto inferior direito) */
-  floatCta: 'Fale no WhatsApp',
+  floatCta: 'Falar no WhatsApp',
 } as const
 
 export const whatsappUrl = (msg: string = whatsapp.message) =>
@@ -81,7 +81,7 @@ export const about = {
   image: { src: '/images/rtk.webp', alt: 'Topógrafo com receptor RTK em campo ao entardecer' },
   numbers: [
     { value: 1, prefix: '±', suffix: ' cm', label: 'Precisão de posicionamento RTK' },
-    { value: 3, prefix: '', suffix: '', label: 'Estados atendidos: DF, GO e MG' },
+    { value: 10, prefix: '', suffix: '', label: 'Serviços de topografia e projeto' },
     { value: 13133, prefix: 'NBR ', suffix: '', label: 'Norma do levantamento topográfico' },
     { value: 4, prefix: '', suffix: '', label: 'Métodos de levantamento' },
   ],
