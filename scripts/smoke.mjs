@@ -13,7 +13,7 @@
  *   6. as 7 seções + rodapé existe e o rodapé entra na viewport;
  *   7. SplitText roda (há .split__char);
  *   8. zero erros de console/pageerror;
- *   9. sem estouro horizontal no desktop (1440) e no mobile (390).
+ *   9. sem estouro horizontal no desktop (1440), no tablet (834) e no mobile (390).
  * Screenshots são gravados em smoke-shots/.
  */
 import { spawn } from 'node:child_process'
@@ -160,8 +160,9 @@ async function desktopPass(browser) {
   )
   check(
     deskRes.some((n) => n.endsWith('/video/hero.mp4')) &&
-      !deskRes.some((n) => n.endsWith('/video/hero-drone.mp4')),
-    'desktop baixa o vídeo landscape atual, sem buscar o do drone',
+      deskRes.some((n) => n.endsWith('/video/hero-drone.mp4')) &&
+      deskRes.some((n) => n.endsWith('/video/rural.mp4')),
+    'pré-carrega todos os 3 vídeos (landscape + drone + rural)',
   )
 
   const play1 = await page.evaluate(() => {
@@ -206,7 +207,7 @@ async function desktopPass(browser) {
         return (
           getComputedStyle(s).display !== 'none' &&
           r.width > 4 &&
-          s.textContent?.includes('Planejamento, precisão') === true
+          s.textContent?.includes('Soluções técnicas para imóveis') === true
         )
       })(),
       subAboveActions: (() => {
@@ -580,6 +581,48 @@ async function desktopPass(browser) {
   await page.close()
 }
 
+async function tabletPass(browser) {
+  console.log('\n[tablet 834x1112]')
+  const page = await browser.newPage({ viewport: { width: 834, height: 1112 } })
+  const pageErrors = []
+  page.on('pageerror', (e) => pageErrors.push(String(e)))
+
+  await page.goto(URL, { waitUntil: 'load' })
+  await page.waitForSelector('.preloader', { state: 'detached', timeout: 60000 })
+  await wait(500)
+  check(true, 'preloader termina e some no tablet')
+
+  const painted = await page.evaluate(sampleVideo, '.hero .video-player__el')
+  check(
+    painted.w === 1280 && painted.h === 720,
+    `vídeo do tablet é o landscape nativo 1280×720 (${painted.w}×${painted.h})`,
+  )
+  check(String(painted.src ?? '').startsWith('blob:'), 'tablet usa o blob do preloader')
+
+  const res = await page.evaluate(() => performance.getEntriesByType('resource').map((e) => e.name))
+  check(
+    res.some((n) => n.endsWith('/video/hero.mp4')) &&
+      res.some((n) => n.endsWith('/video/hero-drone.mp4')) &&
+      res.some((n) => n.endsWith('/video/rural.mp4')),
+    'pré-carrega todos os 3 vídeos no tablet',
+  )
+
+  const playing = await page.evaluate(() => {
+    const v = document.querySelector('.hero .video-player__el')
+    return !!v && !v.paused && v.currentTime > 0
+  })
+  check(playing, 'tablet: hero toca como vídeo')
+
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  )
+  check(overflow <= 1, `sem estouro horizontal no tablet (Δ=${overflow}px)`)
+
+  check(pageErrors.length === 0, `zero pageerror no tablet${pageErrors.length ? ` → ${pageErrors[0]}` : ''}`)
+
+  await page.close()
+}
+
 async function mobilePass(browser) {
   console.log('\n[mobile 390x844]')
   const page = await browser.newPage({
@@ -687,7 +730,7 @@ async function mobilePass(browser) {
       subOk:
         !!subR &&
         subR.width > 4 &&
-        subEl.textContent?.includes('Planejamento, precisão') === true &&
+        subEl.textContent?.includes('Soluções técnicas para imóveis') === true &&
         (!actR || subR.bottom <= actR.top + 1),
       logoOk: !!logo && logo.naturalWidth === 512 && logo.naturalHeight === 512,
       actions: shown('.hero__actions'),
@@ -724,8 +767,9 @@ async function mobilePass(browser) {
   )
   check(
     mobRes.some((n) => n.endsWith('/video/hero-drone.mp4')) &&
-      !mobRes.some((n) => n.endsWith('/video/hero.mp4')),
-    'celular só baixa o vídeo do drone (sem buscar o landscape)',
+      mobRes.some((n) => n.endsWith('/video/hero.mp4')) &&
+      mobRes.some((n) => n.endsWith('/video/rural.mp4')),
+    'pré-carrega todos os 3 vídeos também no celular',
   )
   const ruralPreMob = await page.evaluate(() =>
     performance.getEntriesByType('resource').some((e) => e.name.includes('/video/rural.mp4')),
@@ -828,6 +872,7 @@ async function main() {
   try {
     browser = await chromium.launch({ channel: 'msedge', headless: true })
     await desktopPass(browser)
+    await tabletPass(browser)
     await mobilePass(browser)
   } finally {
     if (browser) await browser.close().catch(() => {})

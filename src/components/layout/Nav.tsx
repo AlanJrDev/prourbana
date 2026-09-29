@@ -110,7 +110,7 @@ export function Nav() {
 
         <div className="nav__actions">
           <span className="nav__phone">{whatsapp.display}</span>
-          <WhatsAppCTA className="nav__cta" size="md" label="WhatsApp" />
+          <WhatsAppCTA className="nav__cta" size="md" label="Solicitar orçamento" />
           <button
             type="button"
             className="nav__toggle"
@@ -139,7 +139,7 @@ export function Nav() {
             </li>
           ))}
         </ul>
-        <WhatsAppCTA size="lg" label="Falar no WhatsApp" />
+        <WhatsAppCTA size="lg" label="Solicitar orçamento" />
       </div>
     </>
   )

@@ -9,13 +9,13 @@ export const brand = {
   monogram: '/brand/logo.png',
   wordmark: '/brand/letreiro.png',
   wordmarkDark: '/brand/letreiro-dark.png',
-  tagline: 'Projetos que se veem do alto',
+  tagline: 'Soluções técnicas em projetos, topografia e regularização para imóveis, propriedades e empreendimentos.',
 } as const
 
 /**
  * Mídia dos dois destaques.
  *  - hero: o vídeo toca sozinho (loop nativo, exibição — sem scrub de rolagem);
- *  - rural: ping-pong contínuo; freezeAt é o instante congelado em reduced motion.
+ *  - rural: loop nativo igual ao hero; freezeAt ficou inerte (sem ping-pong).
  */
 export const media = {
   hero: {
@@ -38,7 +38,8 @@ export const media = {
 export const whatsapp = {
   phone: '5561996889595',
   display: '(61) 99688-9595',
-  message: 'Olá! Vim pelo site da Prourbana e gostaria de um orçamento.',
+  message:
+    'Olá! Vim pelo site da ProUrbana e gostaria de solicitar uma orientação/orçamento. Meu serviço é relacionado a: ______.',
   /** rótulo do botão flutuante (canto inferior direito) */
   floatCta: 'Falar no WhatsApp',
 } as const
@@ -47,95 +48,95 @@ export const whatsappUrl = (msg: string = whatsapp.message) =>
   `https://wa.me/${whatsapp.phone}?text=${encodeURIComponent(msg)}`
 
 export const nav = [
+  { label: 'Início', href: '#topo' },
+  { label: 'Soluções', href: '#servicos' },
+  { label: 'Projetos', href: '#portfolio' },
   { label: 'Sobre', href: '#sobre' },
-  { label: 'Serviços', href: '#servicos' },
-  { label: 'Regularização', href: '#rural' },
-  { label: 'Portfólio', href: '#portfolio' },
   { label: 'Contato', href: '#contato' },
 ] as const
 
 export const hero = {
   /** h1 — fica sr-only em todas as telas (SEO/leitores) */
-  title: ['Projetos que', 'se veem do alto'],
-  /** frase principal — único texto visível da hero em desktop/tablet */
-  short: 'Arquitetura, Urbanismo e Topografia',
-  /** subtítulo — aparece só no celular (≤620px) */
-  sub: 'Planejamento, precisão e visão para o futuro.',
-  primaryCta: 'Falar no WhatsApp',
-  secondaryCta: 'Ver serviços',
+  title: ['Do terreno ao projeto.', 'Do projeto à regularização.'],
+  /** frase principal — visível em todas as telas */
+  short: 'Do terreno ao projeto. Do projeto à regularização.',
+  /** subtítulo — visível em todos os formatos, acima dos botões */
+  sub: 'Soluções técnicas para imóveis, terrenos, obras e empreendimentos — com precisão, responsabilidade e acompanhamento em cada etapa.',
+  primaryCta: 'Falar com a Prourbana',
+  secondaryCta: 'Conhecer soluções',
   scrollHint: 'Role para explorar',
 } as const
 
 export const about = {
-  eyebrow: 'Quem somos',
-  title: ['Precisão, confiança', 'e dedicação ao cliente.'],
+  eyebrow: 'Engenharia que dá segurança à decisão',
+  title: ['Precisão técnica começa', 'antes da execução.'],
   body: [
-    'Somos a Prourbana Projetos e Consultoria: topografia, arquitetura e regularização fundiária conduzidas pelo mesmo time, do primeiro levantamento de campo até a escritura lavrada.',
-    'O cliente que nos procura e senta à mesa com nosso arquiteto fecha contrato em 90% dos casos — e, na maioria das vezes, continua conosco no próximo projeto.',
+    'Um levantamento incorreto, uma documentação incompleta ou uma implantação mal executada podem gerar retrabalho, atrasos e custos desnecessários. Na ProUrbana, cada projeto começa pela compreensão da necessidade do cliente e segue com levantamentos precisos, análise técnica e acompanhamento em todas as etapas necessárias.',
+    'Da medição em campo à entrega da documentação, trabalhamos para que você tenha clareza, segurança e confiança para seguir adiante.',
   ],
   bullets: [
-    'Atendemos pessoas físicas e jurídicas: construtoras, advogados, arquitetos, engenheiros e proprietários de terra.',
-    'Proposta detalhada, com reajuste negociado caso o escopo mude.',
-    'Do campo ao cartório: uma única responsável por toda a jornada.',
+    'Levantamentos realizados com equipamentos e metodologia adequados a cada projeto.',
+    'Projetos desenvolvidos de acordo com as características reais do imóvel e do terreno.',
+    'Acompanhamento técnico durante as etapas necessárias do serviço.',
   ],
   image: { src: '/images/rtk.webp', alt: 'Topógrafo com receptor RTK em campo ao entardecer' },
   numbers: [
-    { value: 1, prefix: '±', suffix: ' cm', label: 'Precisão de posicionamento RTK' },
-    { value: 10, prefix: '', suffix: '', label: 'Serviços de topografia e projeto' },
-    { value: 13133, prefix: 'NBR ', suffix: '', label: 'Norma do levantamento topográfico' },
-    { value: 4, prefix: '', suffix: '', label: 'Métodos de levantamento' },
+    { value: 1, prefix: '±', suffix: ' cm', label: 'Precisão em campo' },
+    { value: 10, prefix: '', suffix: '+', label: 'Anos de experiência' },
+    { value: 13133, prefix: 'NBR ', suffix: '', label: 'Padrão técnico' },
+    { value: 4, prefix: '', suffix: '', label: 'Frentes de solução' },
   ],
 } as const
 
 export const services = {
-  eyebrow: 'O que fazemos',
-  title: ['Quatro frentes,', 'um único contrato.'],
-  lead: 'Do projeto à regularização, tudo conduzido pela mesma equipe técnica.',
+  eyebrow: 'Soluções integradas',
+  title: ['Uma equipe para diferentes', 'etapas do seu projeto.'],
+  lead: 'Do levantamento do terreno à documentação final, reunimos conhecimento técnico para reduzir retrabalho, facilitar decisões e tornar o processo mais seguro para o cliente.',
   items: [
     {
       icon: 'building',
       title: 'Projetos',
       description:
-        'Arquitetura, urbanismo e REURB, sinalização viária, infraestrutura urbana, terraplenagem e pavimentação e instalações prediais.',
-      highlights: ['Arquitetura', 'Urbanismo / REURB', 'Infraestrutura', 'Terraplenagem'],
+        'Soluções de arquitetura, urbanismo e engenharia desenvolvidas de acordo com a realidade do terreno, do imóvel e do objetivo do cliente.',
+      highlights: ['Arquitetura', 'Urbanismo', 'Projetos técnicos', 'Adequações e estudos'],
     },
     {
       icon: 'ruler',
       title: 'Levantamentos',
       description:
-        'Planialtimétrico e cadastral convencional por RTK e estação total, aerofotogrametria e scan laser, com georreferenciamento de imóveis rurais.',
-      highlights: ['RTK', 'Estação total', 'Aerofotogrametria', 'Scan laser'],
+        'Informações precisas sobre terreno, edificações e áreas existentes para dar segurança a projetos, obras, regularizações e decisões técnicas.',
+      highlights: ['Levantamento topográfico', 'Planialtimétrico Cadastral', 'Georreferenciamento'],
     },
     {
       icon: 'layers',
       title: 'As-Built & Locação',
       description:
-        'Acompanhamento topográfico e locação de obras: fundações, redes de drenagem, esgoto sanitário e água potável — com registro as-built.',
-      highlights: ['Drenagem', 'Esgoto', 'Água potável', 'Fundações'],
+        'Precisão entre o que foi projetado, o que será implantado e o que realmente foi executado em campo.',
+      highlights: ['Locação de obras', 'Implantação de projetos', 'Levantamento As-Built', 'Conferência de execução'],
     },
     {
       icon: 'file-check',
       title: 'Regularização',
       featured: true,
       description:
-        'Regularização de imóveis rurais e urbanos de ponta a ponta: especialização de matrículas, georreferenciamento, retificação, CAR e protocolos no INCRA, SIGEF e cartório.',
-      highlights: ['INCRA', 'SIGEF', 'Cartório', 'CAR'],
+        'Apoio técnico para organizar, corrigir e conduzir processos de regularização de imóveis e propriedades urbanas ou rurais.',
+      highlights: ['Imóveis urbanos', 'Imóveis rurais', 'Desmembramentos', 'Georreferenciamento e documentação'],
     },
   ],
 } as const
 
 export const rural = {
-  eyebrow: 'Regularização fundiária',
-  title: ['Sua terra, regularizada', 'do jeito certo.'],
-  lead: 'Especialização de matrículas, georreferenciamento INCRA e SIGEF e toda a parte cartorial — em um único contrato, com acompanhamento do primeiro levantamento até a matrícula retificada.',
-  chips: ['INCRA', 'SIGEF', 'Cartório'],
-  cta: 'Regularizar meu imóvel',
+  eyebrow: 'Regularização rural',
+  title: ['Sua propriedade rural regularizada', 'do campo ao cartório.'],
+  lead: 'Georreferenciamento, levantamentos e suporte técnico para proprietários que precisam organizar a documentação, adequar a propriedade e avançar no processo de regularização. A ProUrbana acompanha as etapas técnicas necessárias junto aos sistemas e órgãos envolvidos, tornando o processo mais claro e seguro para o proprietário.',
+  chips: ['INCRA', 'SIGEF', 'Georreferenciamento', 'Retificação', 'Desmembramento'],
+  cta: 'Quero regularizar minha propriedade',
 } as const
 
 export const portfolio = {
-  eyebrow: 'Portfólio',
-  title: ['Projetos entregues', 'em detalhe.'],
-  lead: 'Estudos, projetos e visualizações que viram obra — do residencial ao comercial.',
+  eyebrow: 'Trabalhos realizados',
+  title: ['Projetos que', 'saíram do papel.'],
+  lead: 'Conheça alguns dos trabalhos desenvolvidos pela ProUrbana em levantamentos, projetos, obras e regularização.',
   items: [
     { src: '/images/portfolio-01.webp', title: 'Regularização de matrícula — vistoria e georreferenciamento', tag: 'Regularização' },
     { src: '/images/portfolio-02.webp', title: 'Banheiro — projetação hidrossanitária', tag: 'Instalações' },
@@ -148,71 +149,62 @@ export const portfolio = {
 } as const
 
 export const proof = {
-  eyebrow: 'Por que a Prourbana',
+  eyebrow: 'Mais do que entregar um projeto',
   quote: [
-    'Precisão, confiança e dedicação ao cliente.',
-    'O cliente que nos procura e vem a uma reunião presencial fecha contrato em 90% dos casos — e termina tendo muita amizade com a equipe.',
+    'Técnica gera precisão. Proximidade gera confiança.',
+    'Existe uma decisão importante por trás de quem nos procura. Por isso, nosso trabalho começa entendendo o problema do cliente e termina quando ele sabe exatamente o que foi feito e qual é o próximo passo.',
   ],
   attribution: 'Diagnóstico interno · Prourbana Projetos e Consultoria',
   pillars: [
     {
       title: 'Precisão',
-      body: 'RTK, estação total, aerofotogrametria e scan laser: cada projeto nasce de dado medido em campo, não de estimativa.',
+      body: 'Dados confiáveis para que projetos, obras e decisões sejam tomadas sobre informações técnicas consistentes.',
     },
     {
       title: 'Confiança',
-      body: 'Escopo, prazo e valor em proposta escrita. Se o escopo mudar, renegociamos com você antes de qualquer cobrança.',
+      body: 'Comunicação clara sobre etapas, necessidades e caminhos possíveis durante a execução do serviço.',
     },
     {
       title: 'Dedicação',
-      body: 'Um único ponto de contato do levantamento à matrícula — e um arquiteto que atende a reunião pessoalmente.',
+      body: 'Acompanhamento próximo e atenção aos detalhes do início à conclusão de cada trabalho.',
     },
   ],
 } as const
 
 export const contact = {
-  eyebrow: 'Vamos começar',
-  title: ['Solicite sua', 'proposta.'],
-  lead: 'Conte o que você precisa — levantamento, projeto ou regularização — e devolvemos uma proposta com escopo, prazo e valor.',
-  cta: 'Falar no WhatsApp',
-  availability: 'Atendimento presencial em Brasília e região · serviços remotos em todo o Brasil',
+  eyebrow: 'Fale com a Prourbana',
+  title: ['Conte para a gente', 'o que você precisa resolver.'],
+  lead: 'Precisa de levantamento, projeto, locação de obra ou regularização? Envie sua necessidade para nossa equipe. Vamos entender o seu caso e orientar você sobre o serviço adequado e os próximos passos.',
+  cta: 'Falar com nossa equipe',
+  availability:
+    'Atendimento direto pelo WhatsApp · Projetos urbanos • Projetos rurais • Empresas • Proprietários • Empreendimentos',
 } as const
 
 export const footer = {
   columns: [
     {
-      title: 'Projetos',
+      title: 'Soluções',
       items: [
-        'Arquitetura',
-        'Urbanismo / REURB',
-        'Infraestrutura urbana',
-        'Terraplenagem e pavimentação',
-        'Sinalização viária',
-      ],
-    },
-    {
-      title: 'Levantamentos',
-      items: [
-        'Planialtimétrico e cadastral',
-        'RTK e estação total',
-        'Aerofotogrametria e scan laser',
+        'Arquitetura e Urbanismo',
+        'Levantamentos Topográficos',
+        'As-Built',
+        'Locação de Obras',
+        'Regularização Urbana',
+        'Regularização Rural',
         'Georreferenciamento',
-        'Acompanhamento de obras',
       ],
     },
     {
-      title: 'Regularização',
-      items: [
-        'Matrículas rurais e urbanas',
-        'Especialização (Provimento 2)',
-        'Retificação de matrículas',
-        'CAR',
-        'INCRA · SIGEF · Cartório',
-      ],
+      title: 'Atendimento',
+      items: ['Brasília — DF', 'Goiás', 'Minas Gerais', 'Outras localidades sob consulta'],
+    },
+    {
+      title: 'Contato',
+      items: ['WhatsApp', 'E-mail', 'Instagram'],
     },
   ],
   legal: 'Prourbana Projetos e Consultoria Ltda — CNPJ a informar',
-  rights: `© ${new Date().getFullYear()} Prourbana. Todos os direitos reservados.`,
+  rights: `© ${new Date().getFullYear()} ProUrbana Projetos e Consultoria Ltda. Todos os direitos reservados.`,
 } as const
 
 export type ServiceIconKey = (typeof services.items)[number]['icon']
