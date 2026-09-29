@@ -1362,8 +1362,57 @@ p {
    Portfólio
    ========================================================================== */
 .portfolio {
+  position: relative;
   background: var(--cream);
   overflow: hidden;
+}
+
+/* fundo animado: camada CSS pura atrás do conteúdo — sem JS (zero impacto no
+   pin/scrub), pointer-events:none e opacidade baixa preservam contraste */
+.portfolio__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.portfolio > .container,
+.portfolio__pin {
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio__shape {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  opacity: 0.07;
+  will-change: transform;
+  animation: portfolio-float 30s ease-in-out infinite alternate;
+}
+
+.portfolio__shape--ring {
+  border: 2px solid var(--petro-900);
+}
+
+.portfolio__shape--dot {
+  background: var(--copper-600);
+}
+
+@keyframes portfolio-float {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(14px, -26px, 0) rotate(12deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio__shape {
+    animation: none;
+  }
 }
 
 .portfolio__pin {
@@ -1400,7 +1449,7 @@ p {
 
 .portfolio__item {
   flex: 0 0 auto;
-  width: clamp(260px, 34vw, 460px);
+  width: clamp(280px, 37vw, 500px);
 }
 
 .portfolio__frame {
@@ -1571,6 +1620,44 @@ p {
   width: 17px;
   height: 17px;
   color: var(--copper-500);
+}
+
+.contato__map {
+  width: min(720px, 100%);
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.contato__map iframe {
+  width: 100%;
+  height: 340px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--sand);
+}
+
+.contato__address {
+  font-size: var(--step--1);
+  color: rgba(245, 241, 234, 0.62);
+}
+
+.contato__maps-link {
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--copper-500);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: color 0.3s var(--ease);
+}
+
+.contato__maps-link:hover {
+  color: var(--cream);
 }
 
 /* ==========================================================================
@@ -1841,7 +1928,7 @@ p {
   }
 
   .portfolio__item {
-    width: clamp(240px, 78vw, 360px);
+    width: clamp(250px, 80vw, 380px);
   }
 
   .hero__hint {

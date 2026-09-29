@@ -49,6 +49,7 @@ export const whatsappUrl = (msg: string = whatsapp.message) =>
 export const nav = [
   { label: 'Início', href: '#topo' },
   { label: 'Soluções', href: '#servicos' },
+  { label: 'Regularização', href: '#rural' },
   { label: 'Projetos', href: '#portfolio' },
   { label: 'Sobre', href: '#sobre' },
   { label: 'Contato', href: '#contato' },
@@ -177,6 +178,11 @@ export const contact = {
   cta: 'Falar com nossa equipe',
   availability:
     'Atendimento direto pelo WhatsApp · Projetos urbanos • Projetos rurais • Empresas • Proprietários • Empreendimentos',
+  address: 'Guará II — SRIA II (Polo de Moda) · Brasília/DF · CEP 71070-505',
+  mapsEmbed:
+    'https://www.google.com/maps?q=-15.8474636,-47.9798927&hl=pt-BR&z=17&output=embed',
+  mapsUrl:
+    'https://www.google.com/maps/place/ProUrbana/@-15.8474636,-47.9824676,17z/data=!3m1!4b1!4m6!3m5!1s0x935a2ff4521c26bb:0xff90511757f8b6f!8m2!3d-15.8474636!4d-47.9798927!16s%2Fg%2F11w39_dpkh?hl=pt-BR&entry=ttu',
 } as const
 
 export const footer = {

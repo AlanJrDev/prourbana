@@ -36,6 +36,25 @@ export function Contato() {
             Resposta no mesmo dia útil · {whatsapp.display}
           </span>
         </Reveal>
+
+        <Reveal variant="up" delay={0.4} className="contato__map">
+          <iframe
+            title="Localização da ProUrbana no Google Maps"
+            src={contact.mapsEmbed}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+          <p className="contato__address">{contact.address}</p>
+          <a
+            className="contato__maps-link"
+            href={contact.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abrir no Google Maps
+          </a>
+        </Reveal>
       </div>
     </section>
   )
