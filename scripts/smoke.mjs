@@ -9,7 +9,7 @@
  *      o header assume (e volta ao topo em seguida);
  *   4. botões no estilo novo: pill + mecânica do hover (ihb), ArrowFill nas
  *      seções (contato/rural), FAB de WhatsApp fixo, rodapé sem CTA;
- *   5. o vídeo do rural só carrega perto da seção e o loop avança sozinho;
+ *   5. o rural vem pré-baixado do preloader (blob) e o src só seta perto da seção, e o loop avança sozinho;
  *   6. as 7 seções + rodapé existe e o rodapé entra na viewport;
  *   7. SplitText roda (há .split__char);
  *   8. zero erros de console/pageerror;
@@ -397,6 +397,10 @@ async function desktopPass(browser) {
     () => document.querySelector('.rural .video-player__el')?.getAttribute('src') ?? null,
   )
   check(!ruralEarly, 'vídeo do rural só carrega sob demanda (sem src no topo)')
+  const ruralPre = await page.evaluate(() =>
+    performance.getEntriesByType('resource').some((e) => e.name.includes('/video/rural.mp4')),
+  )
+  check(ruralPre, 'rural já baixado no preloader (zero rede na seção)')
 
   const chars = await page.evaluate(() => document.querySelectorAll('.split__char').length)
   check(chars > 0, `SplitText roda (${chars} caracteres)`)
@@ -720,6 +724,10 @@ async function mobilePass(browser) {
       !mobRes.some((n) => n.endsWith('/video/hero.mp4')),
     'celular só baixa o vídeo do drone (sem buscar o landscape)',
   )
+  const ruralPreMob = await page.evaluate(() =>
+    performance.getEntriesByType('resource').some((e) => e.name.includes('/video/rural.mp4')),
+  )
+  check(ruralPreMob, 'rural já baixado no preloader no mobile (zero rede na seção)')
 
   const mExtras = await page.evaluate(() => {
     const short = document.querySelector('.hero__short')

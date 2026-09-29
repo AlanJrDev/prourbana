@@ -103,7 +103,7 @@ export function Preloader({ progress, status, onDone, onRetry }: Props) {
 
         <div className="preloader__meta">
           <span className="preloader__label">
-            {failed ? 'Não foi possível carregar' : 'Carregando vídeo e identidade'}
+            {failed ? 'Não foi possível carregar' : 'Carregando vídeos e identidade'}
           </span>
           <span className="preloader__percent" ref={numRef} data-value="0">
             00

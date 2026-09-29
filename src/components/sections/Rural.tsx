@@ -1,11 +1,12 @@
 import { media, rural, whatsappUrl } from '@/content/site'
+import { assets } from '@/lib/assets'
 import { prefersReducedMotion } from '@/lib/motion'
 import { VideoScrub } from '@/components/frame/VideoScrub'
 import { SplitHeading } from '@/components/motion/SplitHeading'
 import { Reveal } from '@/components/motion/Reveal'
 import { ArrowFillButton } from '@/components/ui/ArrowFillButton'
 
-/** Seção rural: vídeo de 8 s em ping-pong contínuo, carregado sob demanda. */
+/** Seção rural: vídeo de8s em ping-pong contínuo — bytes já vêm do preloader (blob); o src só seta perto da seção. */
 export function Rural() {
   const reduced = prefersReducedMotion()
 
@@ -14,7 +15,7 @@ export function Rural() {
       <VideoScrub
         className="rural__media"
         mode="loop"
-        src={media.rural.src}
+        src={assets.getRuralSrc()}
         poster={media.rural.poster}
         freezeAt={media.rural.freezeAt}
         lazy
