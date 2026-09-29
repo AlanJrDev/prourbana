@@ -15,7 +15,7 @@ export const brand = {
 /**
  * Mídia dos dois destaques.
  *  - hero: o vídeo toca sozinho (loop nativo, exibição — sem scrub de rolagem);
- *  - rural: loop nativo igual ao hero; freezeAt ficou inerte (sem ping-pong).
+ *  - rural: loop nativo igual ao hero.
  */
 export const media = {
   hero: {
@@ -30,7 +30,6 @@ export const media = {
   rural: {
     src: '/video/rural.mp4',
     poster: '/video/rural-poster.webp',
-    freezeAt: 4,
   },
 } as const
 

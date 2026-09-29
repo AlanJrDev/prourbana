@@ -13,7 +13,9 @@
  *   6. as 7 seções + rodapé existe e o rodapé entra na viewport;
  *   7. SplitText roda (há .split__char);
  *   8. zero erros de console/pageerror;
- *   9. sem estouro horizontal no desktop (1440), no tablet (834) e no mobile (390).
+ *   9. sem estouro horizontal no desktop (1440), no tablet (834) e no mobile (390);
+ *  10. com prefers-reduced-motion, hero e rural continuam tocando (nenhum
+ *      conflito de acessibilidade congela os vídeos).
  * Screenshots são gravados em smoke-shots/.
  */
 import { spawn } from 'node:child_process'
@@ -397,7 +399,10 @@ async function desktopPass(browser) {
   const ruralEarly = await page.evaluate(
     () => document.querySelector('.rural .video-player__el')?.getAttribute('src') ?? null,
   )
-  check(!ruralEarly, 'vídeo do rural só carrega sob demanda (sem src no topo)')
+  check(
+    String(ruralEarly ?? '').startsWith('blob:'),
+    'rural monta o src (blob) direto, sem lazy',
+  )
   const ruralPre = await page.evaluate(() =>
     performance.getEntriesByType('resource').some((e) => e.name.includes('/video/rural.mp4')),
   )
@@ -863,6 +868,48 @@ async function mobilePass(browser) {
   await page.close()
 }
 
+async function reducedPass(browser) {
+  console.log('\n[reduced-motion 1440x900]')
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    reducedMotion: 'reduce',
+  })
+  const page = await context.newPage()
+  const pageErrors = []
+  page.on('pageerror', (e) => pageErrors.push(String(e)))
+
+  await page.goto(URL, { waitUntil: 'load' })
+  await page.waitForSelector('.preloader', { state: 'detached', timeout: 60000 })
+  await wait(600)
+
+  const t0 = await page.evaluate(
+    () => document.querySelector('.hero .video-player__el')?.currentTime ?? 0,
+  )
+  await wait(2200)
+  const hero = await page.evaluate(() => {
+    const v = document.querySelector('.hero .video-player__el')
+    return v ? { paused: v.paused, t: v.currentTime } : null
+  })
+  check(
+    !!hero && !hero.paused && hero.t > t0,
+    `hero toca mesmo com prefers-reduced-motion (t ${t0.toFixed(2)}→${hero?.t.toFixed(2)}s)`,
+  )
+
+  await page.evaluate(() => document.querySelector('#rural')?.scrollIntoView())
+  await wait(1600)
+  const ruralV = await page.evaluate(() => {
+    const v = document.querySelector('.rural .video-player__el')
+    return v ? { paused: v.paused, t: v.currentTime } : null
+  })
+  check(
+    !!ruralV && !ruralV.paused && ruralV.t > 0,
+    `rural toca mesmo com prefers-reduced-motion (t=${ruralV?.t.toFixed(2)}s)`,
+  )
+
+  check(pageErrors.length === 0, `zero pageerror${pageErrors.length ? ` → ${pageErrors[0]}` : ''}`)
+  await context.close()
+}
+
 async function main() {
   await rm(shots, { recursive: true, force: true })
   await mkdir(shots, { recursive: true })
@@ -874,6 +921,7 @@ async function main() {
     await desktopPass(browser)
     await tabletPass(browser)
     await mobilePass(browser)
+    await reducedPass(browser)
   } finally {
     if (browser) await browser.close().catch(() => {})
     server.kill()

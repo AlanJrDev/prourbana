@@ -1,25 +1,18 @@
 import { media, rural, whatsappUrl } from '@/content/site'
 import { assets } from '@/lib/assets'
-import { prefersReducedMotion } from '@/lib/motion'
 import { VideoScrub } from '@/components/frame/VideoScrub'
 import { SplitHeading } from '@/components/motion/SplitHeading'
 import { Reveal } from '@/components/motion/Reveal'
 import { ArrowFillButton } from '@/components/ui/ArrowFillButton'
 
-/** Seção rural: vídeo de8s em loop nativo como a hero (sem vai-e-volta) — bytes já vêm do preloader (blob); o src só seta perto da seção. */
+/** Seção rural: vídeo de8s em loop nativo como a hero — bytes já vêm do preloader (blob), monta direto no src. */
 export function Rural() {
-  const reduced = prefersReducedMotion()
-
   return (
     <section className="rural section" id="rural">
       <VideoScrub
         className="rural__media"
-        mode="play"
         src={assets.getRuralSrc()}
         poster={media.rural.poster}
-        freezeAt={media.rural.freezeAt}
-        lazy
-        paused={reduced}
       />
       <div className="rural__scrim" aria-hidden="true" />
 

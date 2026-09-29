@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { ArrowDown } from 'lucide-react'
-import { prefersReducedMotion } from '@/lib/motion'
 import { assets } from '@/lib/assets'
 import { brand, hero } from '@/content/site'
 import { VideoScrub } from '@/components/frame/VideoScrub'
@@ -21,7 +20,6 @@ const TOP_EXIT = 140
  * drone já voando, acima disso, o paisagem atual.
  */
 export function Hero() {
-  const reduced = prefersReducedMotion()
   const [atTop, setAtTop] = useState(true)
 
   useEffect(() => {
@@ -35,10 +33,8 @@ export function Hero() {
     <section className="hero" id="topo">
       <VideoScrub
         className="hero__media"
-        mode="play"
         src={assets.getHeroSrc()}
         poster={assets.getHeroPoster()}
-        paused={reduced}
       />
       <div className="hero__scrim" aria-hidden="true" />
       <div className="hero__grain" aria-hidden="true" />
