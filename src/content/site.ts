@@ -34,10 +34,10 @@ export const media = {
   },
 } as const
 
-/** Formato internacional: 55 + DDD + número. Trocar quando o número real for confirmado. */
+/** Formato internacional: 55 + DDD + número. */
 export const whatsapp = {
-  phone: '5500000000000',
-  display: '(00) 00000-0000',
+  phone: '5561996889595',
+  display: '(61) 99688-9595',
   message: 'Olá! Vim pelo site da Prourbana e gostaria de um orçamento.',
   /** rótulo do botão flutuante (canto inferior direito) */
   floatCta: 'Fale no WhatsApp',
@@ -80,10 +80,10 @@ export const about = {
   ],
   image: { src: '/images/rtk.webp', alt: 'Topógrafo com receptor RTK em campo ao entardecer' },
   numbers: [
-    { value: 240, prefix: '+', suffix: '', label: 'Projetos e levantamentos' },
-    { value: 3, prefix: '', suffix: '', label: 'Estados de atuação' },
-    { value: 30, prefix: 'R$ ', suffix: ' mil', label: 'Ticket médio por serviço' },
-    { value: 90, prefix: '', suffix: '%', label: 'Fechamento em reunião' },
+    { value: 1, prefix: '±', suffix: ' cm', label: 'Precisão de posicionamento RTK' },
+    { value: 3, prefix: '', suffix: '', label: 'Estados atendidos: DF, GO e MG' },
+    { value: 13133, prefix: 'NBR ', suffix: '', label: 'Norma do levantamento topográfico' },
+    { value: 4, prefix: '', suffix: '', label: 'Métodos de levantamento' },
   ],
 } as const
 
