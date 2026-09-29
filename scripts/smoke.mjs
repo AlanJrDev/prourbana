@@ -174,12 +174,17 @@ async function desktopPass(browser) {
   check(play1 !== null && !play1.paused, 'hero toca como vídeo (paused=false)')
   check(play1?.loop === true, 'hero repete em loop')
   await wait(1100)
-  const play2 = await page.evaluate(
-    () => document.querySelector('.hero .video-player__el')?.currentTime ?? -1,
-  )
+  const play2 = await page.evaluate(() => {
+    const v = document.querySelector('.hero .video-player__el')
+    return v ? { t: v.currentTime, d: v.duration || 0 } : { t: -1, d: 0 }
+  })
+  // clipe curto pode dar a volta do loop entre as leituras: delta contando o wrap
+  const rawDelta = play2.t - (play1?.t ?? 0)
+  const wrapped = rawDelta < 0 && play2.d > 0
+  const heroDelta = wrapped ? rawDelta + play2.d : rawDelta
   check(
-    play1 !== null && play2 > play1.t + 0.4,
-    `hero avança sozinho, sem rolagem (${play1 ? play1.t.toFixed(2) : '-'}s → ${play2.toFixed(2)}s)`,
+    play1 !== null && heroDelta > 0.4,
+    `hero avança sozinho, sem rolagem (${play1 ? play1.t.toFixed(2) : '-'}s → ${play2.t.toFixed(2)}s${wrapped ? ' [loop]' : ''})`,
   )
 
   const layout = await page.evaluate(() => {
@@ -882,17 +887,22 @@ async function reducedPass(browser) {
   await page.waitForSelector('.preloader', { state: 'detached', timeout: 60000 })
   await wait(600)
 
-  const t0 = await page.evaluate(
-    () => document.querySelector('.hero .video-player__el')?.currentTime ?? 0,
-  )
+  const t0 = await page.evaluate(() => {
+    const v = document.querySelector('.hero .video-player__el')
+    return v ? { t: v.currentTime, d: v.duration || 0 } : { t: 0, d: 0 }
+  })
   await wait(2200)
   const hero = await page.evaluate(() => {
     const v = document.querySelector('.hero .video-player__el')
-    return v ? { paused: v.paused, t: v.currentTime } : null
+    return v ? { paused: v.paused, t: v.currentTime, d: v.duration || 0 } : null
   })
+  // clipe curto pode dar a volta do loop entre as leituras: delta contando o wrap
+  const rawHero = (hero?.t ?? 0) - t0.t
+  const heroDur = hero?.d || t0.d || 0
+  const heroAdv = rawHero < 0 && heroDur > 0 ? rawHero + heroDur : rawHero
   check(
-    !!hero && !hero.paused && hero.t > t0,
-    `hero toca mesmo com prefers-reduced-motion (t ${t0.toFixed(2)}→${hero?.t.toFixed(2)}s)`,
+    !!hero && !hero.paused && heroAdv > 0.4,
+    `hero toca mesmo com prefers-reduced-motion (t ${t0.t.toFixed(2)}→${hero?.t.toFixed(2)}s${rawHero < 0 ? ' [loop]' : ''})`,
   )
 
   await page.evaluate(() => document.querySelector('#rural')?.scrollIntoView())
