@@ -750,6 +750,31 @@ async function mobilePass(browser) {
   check(overflow <= 1, `sem estouro horizontal (Δ=${overflow}px)`)
 
   await page.screenshot({ path: path.join(shots, 'mobile-01-hero.png') })
+
+  let mPinned = false
+  for (let i = 0; i < 60 && !mPinned; i++) {
+    await page.mouse.wheel(0, 400)
+    await wait(120)
+    mPinned = await page.evaluate(() => {
+      const pin = document.querySelector('.portfolio__pin')
+      if (!pin) return false
+      return pin.getBoundingClientRect().top <= 1
+    })
+  }
+  await page.mouse.wheel(0, 800)
+  await wait(500)
+  const mTrackX = await page.evaluate(() => {
+    const t = document.querySelector('.portfolio__track')
+    if (!t) return 0
+    const tf = getComputedStyle(t).transform
+    const m = tf && tf !== 'none' ? tf.match(/matrix\(([^)]+)\)/) : null
+    return m ? parseFloat(m[1].split(',')[4]) : 0
+  })
+  check(
+    mPinned && mTrackX < -10,
+    `portfólio mobile segue a rolagem normal (pin=${mPinned}, trilha=${Math.round(mTrackX)}px)`,
+  )
+
   await scrollToEnd(page, { step: 500, max: 70 })
   await page.screenshot({ path: path.join(shots, 'mobile-02-fim.png') })
 

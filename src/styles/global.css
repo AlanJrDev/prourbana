@@ -1371,6 +1371,24 @@ p {
   overflow: hidden;
 }
 
+/* reduced-motion: a trilha volta a ser swipe horizontal manual (sem pin) */
+.portfolio__pin--swipe {
+  height: auto;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-block: var(--space-3);
+}
+
+.portfolio__pin--swipe .portfolio__track {
+  transform: none !important;
+}
+
+.portfolio__pin--swipe .portfolio__item {
+  scroll-snap-align: center;
+}
+
 .portfolio__track {
   display: flex;
   gap: clamp(1.25rem, 3vw, 2.5rem);
@@ -1808,21 +1826,7 @@ p {
     gap: var(--space-3);
   }
 
-  .portfolio__pin {
-    height: auto;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-    padding-block: var(--space-3);
-  }
-
-  .portfolio__track {
-    transform: none !important;
-  }
-
   .portfolio__item {
-    scroll-snap-align: center;
     width: clamp(240px, 78vw, 360px);
   }
 

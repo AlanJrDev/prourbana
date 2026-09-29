@@ -7,8 +7,9 @@ import { SectionHeader } from '@/components/layout/SectionHeader'
 import { Reveal } from '@/components/motion/Reveal'
 
 /**
- * Portfólio em scroll horizontal com pin no desktop (swipe nativo no mobile).
- * O deslocamento é igual à largura que sobra na trilha.
+ * Portfólio em scroll horizontal com pin em qualquer largura: a rolagem da
+ * página (scroll normal, com touch no mobile) move a trilha lateralmente.
+ * Com prefers-reduced-motion a trilha vira swipe horizontal manual.
  */
 export function Portfolio() {
   const pinRef = useRef<HTMLDivElement>(null)
@@ -17,34 +18,36 @@ export function Portfolio() {
   useLayoutEffect(() => {
     const pin = pinRef.current
     const track = trackRef.current
-    if (!pin || !track || prefersReducedMotion()) return
+    if (!pin || !track) return
 
-    const mm = gsap.matchMedia()
+    if (prefersReducedMotion()) {
+      pin.classList.add('portfolio__pin--swipe')
+      return
+    }
 
-    mm.add('(min-width: 901px)', () => {
-      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + 48)
+    const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + 48)
 
-      const tween = gsap.to(track, {
-        x: () => -distance(),
-        ease: 'none',
-      })
-
-      const st = ScrollTrigger.create({
-        trigger: pin,
-        start: 'top top',
-        end: () => '+=' + distance(),
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.6,
-        animation: tween,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
-      })
-
-      return () => st.kill()
+    const tween = gsap.to(track, {
+      x: () => -distance(),
+      ease: 'none',
     })
 
-    return () => mm.revert()
+    const st = ScrollTrigger.create({
+      trigger: pin,
+      start: 'top top',
+      end: () => '+=' + distance(),
+      pin: true,
+      pinSpacing: true,
+      scrub: 0.6,
+      animation: tween,
+      invalidateOnRefresh: true,
+      anticipatePin: 1,
+    })
+
+    return () => {
+      st.kill()
+      tween.kill()
+    }
   }, [])
 
   return (
