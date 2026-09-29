@@ -1,6 +1,12 @@
 import { media } from '@/content/site'
+import { vlog } from '@/lib/vidlog'
 
 export type ProgressReporter = (progress: number) => void
+
+/** Timeout do download do vídeo do hero: depois disso vira erro + retry. */
+const HERO_TIMEOUT_MS = 60_000
+/** Assets de apoio (pôster/marca) não podem segurar a página além disso. */
+const WARM_TIMEOUT_MS = 8_000
 
 /**
  * O dispositivo escolhe o vídeo da hero no momento do carregamento:
@@ -71,41 +77,52 @@ export class MediaLoader {
 
     if (!this.heroUrl) {
       const weight = CRITICAL[0].weight
-      const res = await fetch(CRITICAL[0].url, { cache: 'force-cache' })
-      if (!res.ok) throw new Error(`${res.status} ${CRITICAL[0].url}`)
+      const controller = new AbortController()
+      const timeout = window.setTimeout(() => {
+        vlog(`preload: timeout de ${HERO_TIMEOUT_MS / 1000}s no download do vídeo — abortado`)
+        controller.abort()
+      }, HERO_TIMEOUT_MS)
 
-      const total = Number(res.headers.get('content-length')) || 0
-      let blob: Blob
+      try {
+        const res = await fetch(CRITICAL[0].url, { cache: 'force-cache', signal: controller.signal })
+        if (!res.ok) throw new Error(`${res.status} ${CRITICAL[0].url}`)
 
-      if (res.body && total > 0) {
-        const reader = res.body.getReader()
-        const chunks: BlobPart[] = []
-        let received = 0
-        for (;;) {
-          const { done, value } = await reader.read()
-          if (done) break
-          chunks.push(value as unknown as BlobPart)
-          received += value.byteLength
-          this.emit(weight * Math.min(1, received / total))
+        const total = Number(res.headers.get('content-length')) || 0
+        let blob: Blob
+
+        if (res.body && total > 0) {
+          const reader = res.body.getReader()
+          const chunks: BlobPart[] = []
+          let received = 0
+          for (;;) {
+            const { done, value } = await reader.read()
+            if (done) break
+            chunks.push(value as unknown as BlobPart)
+            received += value.byteLength
+            this.emit(weight * Math.min(1, received / total))
+          }
+          blob = new Blob(chunks, { type: 'video/mp4' })
+        } else {
+          blob = await res.blob()
+          this.emit(weight)
         }
-        blob = new Blob(chunks, { type: 'video/mp4' })
-      } else {
-        blob = await res.blob()
-        this.emit(weight)
-      }
 
-      this.heroUrl = URL.createObjectURL(blob)
+        this.heroUrl = URL.createObjectURL(blob)
+      } finally {
+        window.clearTimeout(timeout)
+      }
     }
 
-    // pôster e marca: só aquecem o cache (rápidos, fora da barra)
+    // pôster e marca: só aquecem o cache (com teto — nunca seguram a página)
     await Promise.all(
       WARM.map(async ({ url }) => {
-        try {
-          const res = await fetch(url, { cache: 'force-cache' })
-          if (res.ok) await res.arrayBuffer()
-        } catch {
-          // não bloqueia a página por um asset de apoio
-        }
+        const warm = fetch(url, { cache: 'force-cache' })
+          .then((r) => (r.ok ? r.arrayBuffer() : undefined))
+          .catch(() => undefined)
+        await Promise.race([
+          warm,
+          new Promise<void>((resolve) => window.setTimeout(resolve, WARM_TIMEOUT_MS)),
+        ])
       }),
     )
 

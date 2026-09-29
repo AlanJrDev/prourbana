@@ -557,6 +557,12 @@ async function desktopPass(browser) {
   })
   check(cols > 0, `track do portfólio mede ${cols}px (pin horizontal)`)
 
+  const vidDiag = await page.evaluate(() => window.__vidDiag ?? [])
+  check(
+    Array.isArray(vidDiag) && vidDiag.some((l) => l.includes('play: tocando')),
+    `diagnóstico [vid] ativo (${vidDiag.length} linhas)`,
+  )
+
   check(pageErrors.length === 0, `zero pageerror${pageErrors.length ? ` → ${pageErrors[0]}` : ''}`)
   const realErrors = consoleErrors.filter((e) => !/font|favicon|net::ERR_NAME/i.test(e))
   check(realErrors.length === 0, `zero console.error${realErrors.length ? ` → ${realErrors[0]}` : ''}`)
@@ -790,6 +796,12 @@ async function mobilePass(browser) {
   check(
     mWaFinal != null && !mWaFinal.off && mWaFinal.op > 0.9,
     `FAB aparece depois da hero mobile (op=${mWaFinal?.op})`,
+  )
+
+  const mVidDiag = await page.evaluate(() => window.__vidDiag ?? [])
+  check(
+    Array.isArray(mVidDiag) && mVidDiag.some((l) => l.includes('play: tocando')),
+    `diagnóstico [vid] ativo no mobile (${mVidDiag.length} linhas)`,
   )
 
   check(pageErrors.length === 0, `zero pageerror${pageErrors.length ? ` → ${pageErrors[0]}` : ''}`)
