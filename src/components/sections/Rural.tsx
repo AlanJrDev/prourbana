@@ -6,7 +6,7 @@ import { SplitHeading } from '@/components/motion/SplitHeading'
 import { Reveal } from '@/components/motion/Reveal'
 import { ArrowFillButton } from '@/components/ui/ArrowFillButton'
 
-/** Seção rural: vídeo de8s em ping-pong contínuo — bytes já vêm do preloader (blob); o src só seta perto da seção. */
+/** Seção rural: vídeo de8s em loop nativo como a hero (sem vai-e-volta) — bytes já vêm do preloader (blob); o src só seta perto da seção. */
 export function Rural() {
   const reduced = prefersReducedMotion()
 
@@ -14,7 +14,7 @@ export function Rural() {
     <section className="rural section" id="rural">
       <VideoScrub
         className="rural__media"
-        mode="loop"
+        mode="play"
         src={assets.getRuralSrc()}
         poster={media.rural.poster}
         freezeAt={media.rural.freezeAt}

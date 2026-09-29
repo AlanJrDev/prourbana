@@ -429,8 +429,8 @@ async function desktopPass(browser) {
         () => document.querySelector('.rural__list') === null,
       )
       check(cardGone, 'card lateral removido — drone do rural livre')
-      // o loop se move por saltos (seek ping-pong): quadros são apresentados
-      // um a um entre os saltos — mede a taxa real via requestVideoFrameCallback
+      // play nativo: quadros apresentados em sequência contínua pela
+      // decodificação do próprio vídeo (requestVideoFrameCallback)
       const rural = await page.evaluate(
         () =>
           new Promise((resolve) => {
@@ -492,9 +492,12 @@ async function desktopPass(browser) {
       const t2 = await page.evaluate(
         () => document.querySelector('.rural .video-player__el')?.currentTime ?? 0,
       )
+      // play nativo: o tempo só avança ou dá wrap para o início; volta no
+      // meio do clipe = ping-pong (bug)
+      const forward = t2 >= t1 + 0.3 || t2 < t1 - 2
       check(
-        Math.abs(t2 - t1) > 0.3,
-        `loop do rural anda nos dois sentidos (${t1.toFixed(2)}s → ${t2.toFixed(2)}s)`,
+        forward,
+        `rural toca sozinho e repete do início (${t1.toFixed(2)}s → ${t2.toFixed(2)}s)`,
       )
     }
 
