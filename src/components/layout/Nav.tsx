@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { brand, nav, whatsapp } from '@/content/site'
-import { scrollToSection } from '@/lib/lenis'
+import { scrollToSection, stopLenis, resumeLenis } from '@/lib/lenis'
 import { WhatsAppCTA } from './WhatsAppCTA'
 
 /** Distância de rolagem em que o header assume a posição no topo (px). */
@@ -64,18 +64,29 @@ export function Nav() {
   useEffect(() => {
     if (!open) return
     document.body.style.overflow = 'hidden'
+    stopLenis()
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false)
     }
+    // virou desktop com o menu aberto (resize/rotação): fecha e destrava a rolagem
+    const mq = window.matchMedia('(min-width: 1201px)')
+    const onMq = () => {
+      if (mq.matches) setOpen(false)
+    }
     window.addEventListener('keydown', onKey)
+    mq.addEventListener('change', onMq)
     return () => {
       document.body.style.overflow = ''
+      resumeLenis()
       window.removeEventListener('keydown', onKey)
+      mq.removeEventListener('change', onMq)
     }
   }, [open])
 
   const go = (href: string) => {
     setOpen(false)
+    // o menu trava o Lenis; destrava antes de rolar (scrollTo é ignorado parado)
+    resumeLenis()
     scrollToSection(href)
   }
 

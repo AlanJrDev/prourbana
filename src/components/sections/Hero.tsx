@@ -40,8 +40,16 @@ export function Hero() {
       <div className="hero__grain" aria-hidden="true" />
 
       <div className={`hero__brand ${atTop ? '' : 'hero__brand--hidden'}`.trim()}>
-        <img src={brand.monogram} alt="" width={120} height={120} decoding="async" />
-        <img src={brand.wordmark} alt="Prourbana" decoding="async" />
+        <img src={brand.monogram} alt="" className="hero__monogram" width={120} height={120} decoding="async" />
+        <span className="hero__brand-stack">
+          <img src={brand.wordmark} alt="Prourbana" className="hero__wordmark" decoding="async" />
+          <img
+            src={brand.strip}
+            alt="Topografia, Regularização e Urbanismo"
+            className="brand-strip"
+            decoding="async"
+          />
+        </span>
       </div>
 
       <div className="hero__content container">

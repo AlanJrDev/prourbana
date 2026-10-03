@@ -17,8 +17,15 @@ export function Footer() {
       <div className="footer__top container">
         <div className="footer__brand">
           <img src={brand.monogram} alt="" width={72} height={72} className="footer__mark" decoding="async" />
-          <img src={brand.wordmark} alt="Prourbana" className="footer__wordmark" decoding="async" />
-          <p className="footer__tagline">{brand.tagline}</p>
+          <span className="footer__stack">
+            <img src={brand.wordmark} alt="Prourbana" className="footer__wordmark" decoding="async" />
+            <img
+              src={brand.strip}
+              alt="Topografia, Regularização e Urbanismo"
+              className="brand-strip footer__strip"
+              decoding="async"
+            />
+          </span>
         </div>
 
         <nav className="footer__columns" aria-label="Rodapé">

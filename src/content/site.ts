@@ -9,6 +9,10 @@ export const brand = {
   monogram: '/brand/logo.png',
   wordmark: '/brand/letreiro.png',
   wordmarkDark: '/brand/letreiro-dark.png',
+  /** faixa "Topografia • Regularização • Urbanismo" — entra SÓ sob o letreiro
+   *  da logo grande do hero, na animação de load e no rodapé. O header fixo
+   *  mantém apenas monograma + letreiro. */
+  strip: '/images/brand-strip.webp',
   tagline: 'Soluções técnicas em projetos, topografia e regularização para imóveis, propriedades e empreendimentos.',
 } as const
 
@@ -88,7 +92,23 @@ export const about = {
   ],
 } as const
 
-export const services = {
+export type ServiceIconKey = 'building' | 'hard-hat' | 'layers' | 'map' | 'file-check'
+
+export type ServiceItem = {
+  icon: ServiceIconKey
+  title: string
+  /** linha curta — só aparece no modal */
+  subtitle: string
+  description: string
+  /** texto ampliado — só aparece no modal */
+  detail: string
+  highlights: string[]
+  /** imagem exibida no topo do modal */
+  image?: { src: string; alt: string }
+  featured?: boolean
+}
+
+export const services: { eyebrow: string; title: string[]; lead: string; items: ServiceItem[] } = {
   eyebrow: 'Soluções integradas',
   title: ['Uma equipe para diferentes', 'etapas do seu projeto.'],
   lead: 'Do levantamento do terreno à documentação final, reunimos conhecimento técnico para reduzir retrabalho, facilitar decisões e tornar o processo mais seguro para o cliente.',
@@ -96,34 +116,81 @@ export const services = {
     {
       icon: 'building',
       title: 'Projetos',
+      subtitle: 'Arquitetura e urbanismo',
       description:
         'Soluções de arquitetura, urbanismo e engenharia desenvolvidas de acordo com a realidade do terreno, do imóvel e do objetivo do cliente.',
-      highlights: ['Arquitetura', 'Urbanismo', 'Projetos técnicos', 'Adequações e estudos'],
+      detail:
+        'Desenvolvemos estudos, projetos e documentação técnica partindo da leitura real do terreno e do objetivo de quem vai usar o espaço. Cada entrega considera viabilidade, normas vigentes e o que será necessário para aprovar e executar.',
+      highlights: ['Arquitetura', 'Urbanismo', 'Terraplenagem / Pavimentação', 'Instalações / Estudos'],
+      image: {
+        src: '/images/service-prancha.webp',
+        alt: 'Prancha de projeto urbano sustentável com masterplan, cortes e perspectivas',
+      },
     },
     {
-      icon: 'ruler',
-      title: 'Levantamentos',
+      icon: 'hard-hat',
+      title: 'Locação',
+      subtitle: 'Implantação em campo',
       description:
-        'Informações precisas sobre terreno, edificações e áreas existentes para dar segurança a projetos, obras, regularizações e decisões técnicas.',
-      highlights: ['Levantamento topográfico', 'Planialtimétrico Cadastral', 'Georreferenciamento'],
+        'Transposição do projeto para o terreno, com conferência de eixos, níveis e dimensões antes de cada etapa de execução.',
+      detail:
+        'A locação define no terreno exatamente onde cada elemento será construído. Conferimos referências, eixos e níveis para que a obra avance sem retrabalho e dentro do que foi projetado.',
+      highlights: ['Obras Civis', 'Terraplenagem / Pavimentação', 'Redes de água, esgoto e drenagem'],
+      image: {
+        src: '/images/rtk.webp',
+        alt: 'Topógrafo com receptor RTK em campo ao entardecer',
+      },
     },
     {
       icon: 'layers',
-      title: 'As-Built & Locação',
+      title: 'As-Built',
+      subtitle: 'Registro do executado',
       description:
-        'Precisão entre o que foi projetado, o que será implantado e o que realmente foi executado em campo.',
-      highlights: ['Locação de obras', 'Implantação de projetos', 'Levantamento As-Built', 'Conferência de execução'],
+        'Levantamento do que foi de fato construído, para conferência, memorial e documentação final da obra.',
+      detail:
+        'O as-built registra as diferenças entre o projeto e a execução. É ele que garante que a documentação final descreva o que existe de fato no terreno.',
+      highlights: ['Obras Civis', 'Esgoto sanitário / Drenagem pluvial'],
+      image: {
+        src: '/images/service-asbuilt.webp',
+        alt: 'Edifício comercial executado visto da esquina',
+      },
+    },
+    {
+      icon: 'map',
+      title: 'Levantamentos',
+      subtitle: 'Planialtimétricos e cadastrais',
+      description:
+        'Informações precisas sobre terreno, edificações e áreas existentes para dar segurança a projetos, obras, regularizações e decisões técnicas.',
+      detail:
+        'Escolhemos a metodologia conforme a escala e a precisão exigidas: convencional com uso de estações totais, convencional com uso de GNSS RTK e aerofotogramétrico com uso de drone e scanner laser (LiDAR).',
+      highlights: ['Estações Totais', 'GNSS RTK', 'Drone + LiDAR'],
+      image: {
+        src: '/images/service-levantamento.webp',
+        alt: 'Prancha de implantação cotada com eixos, níveis e áreas',
+      },
     },
     {
       icon: 'file-check',
       title: 'Regularização',
+      subtitle: 'Imóveis urbanos e rurais',
       featured: true,
       description:
         'Apoio técnico para organizar, corrigir e conduzir processos de regularização de imóveis e propriedades urbanas ou rurais.',
-      highlights: ['Imóveis urbanos', 'Imóveis rurais', 'Desmembramentos', 'Georreferenciamento e documentação'],
+      detail:
+        'Acompanhamos as etapas técnicas do processo — do levantamento à documentação — junto aos sistemas e órgãos envolvidos, para que o proprietário saiba sempre o que já foi feito e qual é o próximo passo.',
+      highlights: [
+        'Imóveis urbanos',
+        'Imóveis rurais',
+        'Desmembramento / Remembramento',
+        'Georreferenciamento / Documentação',
+      ],
+      image: {
+        src: '/images/service-regularizacao.webp',
+        alt: 'Equipe em vistoria de regularização de matrícula urbana e rural',
+      },
     },
   ],
-} as const
+}
 
 export const rural = {
   eyebrow: 'Regularização rural',
@@ -139,12 +206,13 @@ export const portfolio = {
   lead: 'Conheça alguns dos trabalhos desenvolvidos pela ProUrbana em levantamentos, projetos, obras e regularização.',
   items: [
     { src: '/images/portfolio-01.webp', title: 'Regularização de matrícula — vistoria e georreferenciamento', tag: 'Regularização' },
-    { src: '/images/portfolio-02.webp', title: 'Banheiro — projetação hidrossanitária', tag: 'Instalações' },
-    { src: '/images/portfolio-03.webp', title: 'Suíte — forro e iluminação indireta', tag: 'Projetos' },
-    { src: '/images/portfolio-04.webp', title: 'Cozinha integrada — marcenaria e iluminação', tag: 'Interiores' },
-    { src: '/images/portfolio-05.webp', title: 'Edifício comercial — estudo de fachada', tag: 'Urbanismo' },
+    { src: '/images/portfolio-10.webp', title: 'Urbanização — estudo de implantação', tag: 'Urbanismo' },
+    { src: '/images/portfolio-13.webp', title: 'Distrito logístico — estudo aéreo de implantação', tag: 'Urbanismo' },
     { src: '/images/portfolio-06.webp', title: 'Edifício comercial — implantação noturna', tag: 'Arquitetura' },
-    { src: '/images/portfolio-07.webp', title: 'Suíte master — detalhamento residencial', tag: 'Arquitetura' },
+    { src: '/images/portfolio-11.webp', title: 'Levantamento cadastral — implantação cotada', tag: 'Levantamentos' },
+    { src: '/images/portfolio-09.webp', title: 'Edifício residencial — pavimento tipo', tag: 'Arquitetura' },
+    { src: '/images/portfolio-12.webp', title: 'Viaduto Itapoá — projeto executivo', tag: 'Topografia' },
+    { src: '/images/portfolio-08.webp', title: 'Loteamento — projeto de implantação', tag: 'Urbanismo' },
   ],
 } as const
 
@@ -211,5 +279,3 @@ export const footer = {
   legal: 'Prourbana Projetos e Consultoria Ltda — CNPJ a informar',
   rights: `© ${new Date().getFullYear()} ProUrbana Projetos e Consultoria Ltda. Todos os direitos reservados.`,
 } as const
-
-export type ServiceIconKey = (typeof services.items)[number]['icon']

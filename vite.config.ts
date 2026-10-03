@@ -14,6 +14,13 @@ export default defineConfig({
     assetsInlineLimit: 0,
     chunkSizeWarningLimit: 900,
   },
+  // a pasta fica no OneDrive: o sync tranca arquivos (EBUSY) e mata o watcher;
+  // imagens/prontos/logs não participam do HMR (recarrega na mão)
+  server: {
+    watch: {
+      ignored: ['**/images/**', '**/prints/**', '**/*-shots/**', '**/*.log', '**/.obsidian/**'],
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,

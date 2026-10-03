@@ -1,4 +1,4 @@
-import { media } from '@/content/site'
+import { brand, media } from '@/content/site'
 import { vlog } from '@/lib/vidlog'
 
 export type ProgressReporter = (progress: number) => void
@@ -36,7 +36,7 @@ const BLOCKING = [
   { url: media.rural.src, weight: 0.44, label: 'rural' },
 ] as const
 
-const WARM = [heroMedia.poster, media.rural.poster, '/brand/logo.png', '/brand/letreiro.png'] as const
+const WARM = [heroMedia.poster, media.rural.poster, brand.monogram, brand.wordmark, brand.strip] as const
 
 /**
  * Baixa os bytes críticos antes de liberar a página: os três vídeos (hero

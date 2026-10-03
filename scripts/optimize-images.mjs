@@ -16,17 +16,61 @@ const outBrand = path.join(root, 'public', 'brand')
 
 const PETROLEUM = { r: 11, g: 43, b: 54 }
 
-/** nome de origem -> nome de saída */
+/** nome de origem -> nome de saída [, largura, qualidade, trim, branqueiaPalavras] */
 const IMAGE_MAP = [
   ['14.25.17', 'portfolio-01.webp', 1400],
-  ['14.25.49', 'portfolio-02.webp', 1400],
-  ['14.25.50', 'portfolio-03.webp', 1400],
-  ['14.25.55', 'portfolio-04.webp', 1400],
-  ['14.25.57', 'portfolio-05.webp', 1400],
   ['14.25.58', 'portfolio-06.webp', 1400],
-  ['14.26.00', 'portfolio-07.webp', 1400],
+  ['novas5', 'portfolio-08.webp', 1400],
+  ['novas6', 'portfolio-09.webp', 1400],
+  ['novas1', 'portfolio-10.webp', 1400],
+  ['novas4', 'portfolio-11.webp', 1400],
+  ['viaduto-itapoa', 'portfolio-12.webp', 1400],
+  ['novas0', 'portfolio-13.webp', 1400],
+  ['novas2', 'service-prancha.webp', 1400],
+  ['topo-campo', 'service-levantamento.webp', 1400],
+  ['14.25.57', 'service-asbuilt.webp', 1400],
+  ['14.25.17', 'service-regularizacao.webp', 1400],
+  ['brand-strip', 'brand-strip.webp', 1600, 92, true, true],
   ['14.25.43', 'rtk.webp', 1600],
 ]
+
+/**
+ * Passa as palavras douradas para quase-branco (mantém a régua superior dourada).
+ * Detecta a régua como a linha com mais píxeis dourados e só clareia abaixo dela.
+ */
+async function whitenWords(pipeline) {
+  const { data, info } = await pipeline.raw().toBuffer({ resolveWithObject: true })
+  const { width, height, channels } = info
+  const gold = (i) => {
+    const r = data[i]
+    const g = data[i + 1]
+    const b = data[i + 2]
+    return r > 110 && r > b + 35 && g > b && g <= r + 10 && r - b > 45
+  }
+  const perRow = new Array(height).fill(0)
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) if (gold((y * width + x) * channels)) perRow[y]++
+  }
+  let ruleRow = 0
+  let best = 0
+  for (let y = 0; y < height; y++) {
+    if (perRow[y] > best) {
+      best = perRow[y]
+      ruleRow = y
+    }
+  }
+  for (let y = ruleRow + 1; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * channels
+      if (!gold(i)) continue
+      const k = 0.9
+      data[i] = Math.round(data[i] + (255 - data[i]) * k)
+      data[i + 1] = Math.round(data[i + 1] + (255 - data[i + 1]) * k)
+      data[i + 2] = Math.round(data[i + 2] + (255 - data[i + 2]) * k)
+    }
+  }
+  return sharp(data, { raw: { width, height, channels } })
+}
 
 async function main() {
   await fs.mkdir(outImages, { recursive: true })
@@ -35,15 +79,19 @@ async function main() {
   const sources = await fs.readdir(srcDir)
   let count = 0
 
-  for (const [needle, output, width] of IMAGE_MAP) {
+  for (const [needle, output, width, quality = 80, trim = false, whiten = false] of IMAGE_MAP) {
     const file = sources.find((f) => f.includes(needle))
     if (!file) {
       console.warn(`[images] AVISO: nenhuma imagem encontrada para "${needle}"`)
       continue
     }
-    await sharp(path.join(srcDir, file))
-      .resize({ width, withoutEnlargement: true })
-      .webp({ quality: 80, effort: 5 })
+    let pipeline = sharp(path.join(srcDir, file))
+    // corta as bordas totalmente transparentes antes de dimensionar
+    if (trim) pipeline = pipeline.trim({ threshold: 18 })
+    pipeline = pipeline.resize({ width, withoutEnlargement: true })
+    if (whiten) pipeline = await whitenWords(pipeline)
+    await pipeline
+      .webp({ quality, effort: 5, alphaQuality: 90 })
       .toFile(path.join(outImages, output))
     count++
     console.log(`[images] ${file} -> public/images/${output}`)
