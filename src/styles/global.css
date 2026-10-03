@@ -2183,7 +2183,7 @@ p {
     padding-right: 0;
     padding-top: calc(var(--nav-h) + 2vh);
     /* ancorado no rodapé da tela: drone e texto livre no meio */
-    padding-bottom: clamp(2rem, 5.5vh, 3.75rem);
+    padding-bottom: clamp(1.25rem, 3.5vh, 2.5rem);
   }
 
   .hero__short {
@@ -2193,13 +2193,9 @@ p {
     margin-bottom: var(--space-3);
   }
 
+  /* mobile sem subtítulo: o título grande desce e sobra vídeo pro drone */
   .hero__sub {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    max-width: 34ch;
-    /* container vira left-aligned no mobile: sub acompanha à esquerda */
-    margin-left: 0;
-    margin-bottom: var(--space-2);
+    display: none;
   }
 
   /* logo grande ocupa bem a largura sem estourar o gutter */

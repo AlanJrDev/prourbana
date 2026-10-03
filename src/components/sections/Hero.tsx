@@ -15,7 +15,8 @@ const TOP_EXIT = 140
  * rolagem) com o drone o mais livre possível. No topo, a logo grande ocupa o
  * espaço vazio acima do drone e o header fica escondido; ao rolar, o header
  * assume a posição e a logo some. Padrão mínimo de texto: só a frase curta e
- * os dois botões — h1 vira sr-only; no celular entra também o subtítulo.
+ * os dois botões — h1 vira sr-only; no celular o subtítulo sai e o título
+ * desce para perto dos botões.
  * O vídeo é escolhido por largura de tela (assets.ts): ≤620px toca a cena do
  * drone já voando, acima disso, o paisagem atual.
  */

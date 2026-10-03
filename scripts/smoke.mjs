@@ -731,17 +731,13 @@ async function mobilePass(browser) {
     const content = box('.hero__content')
     const title = document.querySelector('.hero__title')
     const subEl = document.querySelector('.hero__sub')
-    const subR = subEl?.getBoundingClientRect()
-    const actR = document.querySelector('.hero__actions')?.getBoundingClientRect()
+    const shortEl = document.querySelector('.hero__short')
+    const shortR = shortEl?.getBoundingClientRect()
     const logo = document.querySelector('.nav__brand img')
     return {
       short: shown('.hero__short'),
-      sub: shown('.hero__sub'),
-      subOk:
-        !!subR &&
-        subR.width > 4 &&
-        subEl.textContent?.includes('Soluções técnicas para imóveis') === true &&
-        (!actR || subR.bottom <= actR.top + 1),
+      subHidden: !!subEl && getComputedStyle(subEl).display === 'none',
+      shortLow: !!shortR && shortR.bottom > window.innerHeight * 0.5,
       logoOk: !!logo && logo.naturalWidth === 512 && logo.naturalHeight === 512,
       actions: shown('.hero__actions'),
       noKicker: !document.querySelector('.hero__kicker'),
@@ -757,14 +753,14 @@ async function mobilePass(browser) {
   })
   check(
     heroMobile.short &&
-      heroMobile.sub &&
-      heroMobile.subOk &&
+      heroMobile.subHidden &&
       heroMobile.actions &&
       heroMobile.noKicker &&
       heroMobile.noLead &&
       heroMobile.titleSr,
-    'hero mobile: texto curto + subtítulo (sem sobreposição) + 2 botões (h1 sr-only)',
+    'hero mobile: texto curto sem subtítulo + 2 botões (h1 sr-only)',
   )
+  check(heroMobile.shortLow, 'hero mobile: título grande baixado (termina abaixo da metade)')
   check(heroMobile.logoOk, 'nova logo 512×512 visível no header mobile')
   check(heroMobile.bottom, 'hero mobile: conteúdo na parte inferior')
   check(heroMobile.playing, 'hero mobile toca como vídeo')
