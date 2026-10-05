@@ -9,9 +9,9 @@ export const brand = {
   monogram: '/brand/logo.png',
   wordmark: '/brand/letreiro.png',
   wordmarkDark: '/brand/letreiro-dark.png',
-  /** faixa "Topografia • Regularização • Urbanismo" — entra SÓ sob o letreiro
-   *  da logo grande do hero, na animação de load e no rodapé. O header fixo
-   *  mantém apenas monograma + letreiro. */
+  /** faixa "Arquitetura • Urbanismo • Topografia • Georreferenciamento" —
+   *  entra SÓ sob o letreiro da logo grande do hero, na animação de load e
+   *  no rodapé. O header fixo mantém apenas monograma + letreiro. */
   strip: '/images/brand-strip.webp',
   tagline: 'Soluções técnicas em projetos, topografia e regularização para imóveis, propriedades e empreendimentos.',
 } as const
@@ -23,8 +23,9 @@ export const brand = {
  */
 export const media = {
   hero: {
-    // desktop/tablet: paisagem 1280×720
-    src: '/video/hero.mp4',
+    // desktop/tablet: paisagem 1280×720 — só os últimos 2s do original,
+    // loop nativo de 2s (48 quadros)
+    src: '/video/hero.mp4?v=2',
     poster: '/video/hero-poster.webp',
     // celular (≤620px): somente os últimos 4s do original (4,0–8,0s —
     // só o drone já voando), loop nativo; 1,35 MB
@@ -39,8 +40,8 @@ export const media = {
 
 /** Formato internacional: 55 + DDD + número. */
 export const whatsapp = {
-  phone: '5561996889595',
-  display: '(61) 99688-9595',
+  phone: '556139746421',
+  display: '(61) 3974-6421',
   message:
     'Olá! Vim pelo site da ProUrbana e gostaria de solicitar uma orientação/orçamento. Meu serviço é relacionado a: ______.',
   /** rótulo do botão flutuante (canto inferior direito) */
@@ -276,6 +277,6 @@ export const footer = {
       items: ['WhatsApp', 'E-mail', 'Instagram'],
     },
   ],
-  legal: 'Prourbana Projetos e Consultoria Ltda — CNPJ a informar',
+  legal: 'Prourbana Projetos e Consultoria Ltda — CNPJ 17.949.228/0001-25',
   rights: `© ${new Date().getFullYear()} ProUrbana Projetos e Consultoria Ltda. Todos os direitos reservados.`,
 } as const

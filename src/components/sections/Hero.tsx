@@ -46,7 +46,7 @@ export function Hero() {
           <img src={brand.wordmark} alt="Prourbana" className="hero__wordmark" decoding="async" />
           <img
             src={brand.strip}
-            alt="Topografia, Regularização e Urbanismo"
+            alt="Arquitetura, Urbanismo, Topografia e Georreferenciamento"
             className="brand-strip"
             decoding="async"
           />

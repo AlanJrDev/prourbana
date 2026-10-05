@@ -16,7 +16,7 @@ const outBrand = path.join(root, 'public', 'brand')
 
 const PETROLEUM = { r: 11, g: 43, b: 54 }
 
-/** nome de origem -> nome de saída [, largura, qualidade, trim, branqueiaPalavras] */
+/** nome de origem -> nome de saída [, largura, qualidade, trim] */
 const IMAGE_MAP = [
   ['14.25.17', 'portfolio-01.webp', 1400],
   ['14.25.58', 'portfolio-06.webp', 1400],
@@ -30,47 +30,10 @@ const IMAGE_MAP = [
   ['topo-campo', 'service-levantamento.webp', 1400],
   ['14.25.57', 'service-asbuilt.webp', 1400],
   ['14.25.17', 'service-regularizacao.webp', 1400],
-  ['brand-strip', 'brand-strip.webp', 1600, 92, true, true],
+  // faixa nova já vem branca com pontos laranja — só trim
+  ['brand-strip', 'brand-strip.webp', 1600, 92, true],
   ['14.25.43', 'rtk.webp', 1600],
 ]
-
-/**
- * Passa as palavras douradas para quase-branco (mantém a régua superior dourada).
- * Detecta a régua como a linha com mais píxeis dourados e só clareia abaixo dela.
- */
-async function whitenWords(pipeline) {
-  const { data, info } = await pipeline.raw().toBuffer({ resolveWithObject: true })
-  const { width, height, channels } = info
-  const gold = (i) => {
-    const r = data[i]
-    const g = data[i + 1]
-    const b = data[i + 2]
-    return r > 110 && r > b + 35 && g > b && g <= r + 10 && r - b > 45
-  }
-  const perRow = new Array(height).fill(0)
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) if (gold((y * width + x) * channels)) perRow[y]++
-  }
-  let ruleRow = 0
-  let best = 0
-  for (let y = 0; y < height; y++) {
-    if (perRow[y] > best) {
-      best = perRow[y]
-      ruleRow = y
-    }
-  }
-  for (let y = ruleRow + 1; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const i = (y * width + x) * channels
-      if (!gold(i)) continue
-      const k = 0.9
-      data[i] = Math.round(data[i] + (255 - data[i]) * k)
-      data[i + 1] = Math.round(data[i + 1] + (255 - data[i + 1]) * k)
-      data[i + 2] = Math.round(data[i + 2] + (255 - data[i + 2]) * k)
-    }
-  }
-  return sharp(data, { raw: { width, height, channels } })
-}
 
 async function main() {
   await fs.mkdir(outImages, { recursive: true })
@@ -79,7 +42,7 @@ async function main() {
   const sources = await fs.readdir(srcDir)
   let count = 0
 
-  for (const [needle, output, width, quality = 80, trim = false, whiten = false] of IMAGE_MAP) {
+  for (const [needle, output, width, quality = 80, trim = false] of IMAGE_MAP) {
     const file = sources.find((f) => f.includes(needle))
     if (!file) {
       console.warn(`[images] AVISO: nenhuma imagem encontrada para "${needle}"`)
@@ -89,7 +52,6 @@ async function main() {
     // corta as bordas totalmente transparentes antes de dimensionar
     if (trim) pipeline = pipeline.trim({ threshold: 18 })
     pipeline = pipeline.resize({ width, withoutEnlargement: true })
-    if (whiten) pipeline = await whitenWords(pipeline)
     await pipeline
       .webp({ quality, effort: 5, alphaQuality: 90 })
       .toFile(path.join(outImages, output))
@@ -98,32 +60,32 @@ async function main() {
   }
 
   // ---- marca -------------------------------------------------------------
-  const logo = path.join(brandDir, 'logo.png')
   const letreiro = path.join(brandDir, 'letreiro.png')
 
-  await sharp(logo)
-    .trim()
-    .resize({ width: 512, withoutEnlargement: true })
-    .png({ compressionLevel: 9 })
-    .toFile(path.join(outBrand, 'logo.png'))
-
+  // logo.png NÃO é regenerado aqui: é a arte clara recolorida pelo cliente
+  // (scripts/recolor-logo.mjs). A fonte navy em 'logo e letreiro/' tem
+  // geometria diferente e não pode sobrescrevê-la.
   await sharp(letreiro)
     .trim()
     .resize({ width: 900, withoutEnlargement: true })
     .png({ compressionLevel: 9 })
     .toFile(path.join(outBrand, 'letreiro.png'))
-  console.log('[brand] logo.png e letreiro.png prontos')
+  console.log('[brand] letreiro.png pronta')
 
   // ---- og-image 1200x630 -------------------------------------------------
+  // letreiro novo já é branco (com detalhe laranja) — sem greyscale/negate
   const wordmarkWhite = await sharp(letreiro)
     .trim()
     .resize({ width: 760, withoutEnlargement: true })
-    .greyscale()
-    .negate({ alpha: false })
     .png()
     .toBuffer()
 
-  const monogram = await sharp(logo).trim().resize({ width: 150 }).png().toBuffer()
+  // monograma = arte recolorida do site (branco/laranja do letreiro)
+  const monogram = await sharp(path.join(outBrand, 'logo.png'))
+    .trim()
+    .resize({ width: 150 })
+    .png()
+    .toBuffer()
 
   await sharp({
     create: { width: 1200, height: 630, channels: 3, background: PETROLEUM },
@@ -146,7 +108,7 @@ async function main() {
   const outVideo = path.join(root, 'public', 'video')
   await fs.mkdir(outVideo, { recursive: true })
   const videoPosters = [
-    [path.join(root, 'framesinicial', 'ezgif-frame-054.jpg'), 'hero-poster.webp'],
+    [path.join(root, 'framesinicial', 'hero-2s-frame0.jpg'), 'hero-poster.webp'],
     [path.join(root, 'framesrural', 'ezgif-frame-120.jpg'), 'rural-poster.webp'],
   ]
   for (const [src, output] of videoPosters) {

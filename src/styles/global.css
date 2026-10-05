@@ -160,6 +160,13 @@ p {
   will-change: transform;
 }
 
+/* quebra de linha só entre palavras — sem isso cada letra (inline-block)
+   vira ponto de quebra e palavras partem no meio (ex.: "p" / "ara") */
+.split__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .parallax {
   will-change: transform;
 }
@@ -604,7 +611,6 @@ p {
 .nav__wordmark {
   height: 17px;
   width: auto;
-  filter: brightness(0) invert(1);
 }
 
 .nav__links {
@@ -791,7 +797,6 @@ p {
 
 .preloader__wordmark {
   width: 100%;
-  filter: brightness(0) invert(1);
   opacity: 0.92;
 }
 
@@ -901,8 +906,8 @@ p {
 /* logo grande no topo — o mais próximo do topo possível; sai ao rolar */
 .hero__brand {
   --wm-h: clamp(24px, 3.2vw, 46px);
-  /* letreiro.png é 900×115 → proporção 7.83; a faixa embaixo acompanha */
-  --wm-w: calc(var(--wm-h) * 7.83);
+  /* letreiro.png é 900×113 → proporção 7.97; a faixa embaixo acompanha */
+  --wm-w: calc(var(--wm-h) * 7.97);
   position: absolute;
   top: clamp(0.75rem, 1.6vh, 1.5rem);
   left: 50%;
@@ -939,10 +944,9 @@ p {
 .hero__wordmark {
   width: 100%;
   height: auto;
-  filter: brightness(0) invert(1);
 }
 
-/* faixa "Topografia • Regularização • Urbanismo" — só nas 3 logos grandes */
+/* faixa "Arquitetura • Urbanismo • Topografia • Georreferenciamento" — só nas 3 logos grandes */
 .brand-strip {
   display: block;
   width: 100%;
@@ -1897,8 +1901,8 @@ p {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
-  /* letreiro 900×115 → a faixa embaixo na mesma largura do letreiro */
-  width: calc(26px * 7.83);
+  /* letreiro 900×113 → a faixa embaixo na mesma largura do letreiro */
+  width: calc(26px * 7.97);
   max-width: 100%;
   margin-bottom: var(--space-3);
 }
@@ -1906,7 +1910,6 @@ p {
 .footer__wordmark {
   width: 100%;
   height: auto;
-  filter: brightness(0) invert(1);
 }
 
 .footer__columns {

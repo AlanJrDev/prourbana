@@ -37,7 +37,13 @@ export function SplitHeading({
     }
 
     const ctx = gsap.context(() => {
-      const split = new SplitText(el, { type: 'chars', charsClass: 'split__char' })
+      // words + chars: cada palavra vira uma caixa sólida, para o navegador
+      // só quebre entre palavras (chars isolados partiam palavras no meio)
+      const split = new SplitText(el, {
+        type: 'words, chars',
+        wordsClass: 'split__word',
+        charsClass: 'split__char',
+      })
       gsap.set(el, { opacity: 1 })
       gsap.from(split.chars, {
         yPercent: 118,

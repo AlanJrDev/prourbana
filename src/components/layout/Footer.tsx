@@ -21,7 +21,7 @@ export function Footer() {
             <img src={brand.wordmark} alt="Prourbana" className="footer__wordmark" decoding="async" />
             <img
               src={brand.strip}
-              alt="Topografia, Regularização e Urbanismo"
+              alt="Arquitetura, Urbanismo, Topografia e Georreferenciamento"
               className="brand-strip footer__strip"
               decoding="async"
             />

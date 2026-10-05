@@ -97,7 +97,7 @@ export function Preloader({ progress, status, onDone, onRetry }: Props) {
 
         <span className="preloader__stack">
           <img src={brand.wordmark} alt="Prourbana" className="preloader__wordmark" />
-          <img src={brand.strip} alt="Topografia, Regularização e Urbanismo" className="preloader__strip" decoding="async" />
+          <img src={brand.strip} alt="Arquitetura, Urbanismo, Topografia e Georreferenciamento" className="preloader__strip" decoding="async" />
         </span>
 
         <div className="preloader__meter">

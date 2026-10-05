@@ -41,6 +41,20 @@ const check = (ok, label) => {
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms))
 
+/**
+ * Quanto o vídeo andou de verdade, ignorando voltas de loop: compara o tempo
+ * lido com o ESPERADO (início + tempo decorrido, módulo duração). Serve para
+ * clipe curto de qualquer tamanho — o delta simples falhava quando a espera
+ * era maior que a duração (resíduo pequeno apesar de estar tocando).
+ * Retorna a distância circular entre lido e esperado (menor = tocando).
+ */
+const loopAdvance = (tRead, tStart, elapsedSec, duration) => {
+  if (!(duration > 0)) return Number.POSITIVE_INFINITY
+  const expected = (tStart + elapsedSec) % duration
+  const d = Math.abs(tRead - expected)
+  return Math.min(d, Math.abs(d - duration))
+}
+
 async function startServer() {
   const proc = spawn(
     process.execPath,
@@ -161,12 +175,13 @@ async function desktopPass(browser) {
     performance.getEntriesByType('resource').map((e) => e.name),
   )
   check(
-    deskRes.some((n) => n.endsWith('/video/hero.mp4')) &&
+    deskRes.some((n) => n.includes('/video/hero.mp4')) &&
       deskRes.some((n) => n.endsWith('/video/hero-drone.mp4')) &&
       deskRes.some((n) => n.endsWith('/video/rural.mp4')),
     'pré-carrega todos os 3 vídeos (landscape + drone + rural)',
   )
 
+  const play1At = Date.now()
   const play1 = await page.evaluate(() => {
     const v = document.querySelector('.hero .video-player__el')
     return v ? { t: v.currentTime, paused: v.paused, loop: v.loop } : null
@@ -178,13 +193,13 @@ async function desktopPass(browser) {
     const v = document.querySelector('.hero .video-player__el')
     return v ? { t: v.currentTime, d: v.duration || 0 } : { t: -1, d: 0 }
   })
-  // clipe curto pode dar a volta do loop entre as leituras: delta contando o wrap
-  const rawDelta = play2.t - (play1?.t ?? 0)
-  const wrapped = rawDelta < 0 && play2.d > 0
-  const heroDelta = wrapped ? rawDelta + play2.d : rawDelta
+  const elapsedDesk = (Date.now() - play1At) / 1000
+  const heroAdv = loopAdvance(play2.t, play1?.t ?? 0, elapsedDesk, play2.d)
+  const expectedDesk =
+    play2.d > 0 ? ((play1?.t ?? 0) + elapsedDesk) % play2.d : Number.NaN
   check(
-    play1 !== null && heroDelta > 0.4,
-    `hero avança sozinho, sem rolagem (${play1 ? play1.t.toFixed(2) : '-'}s → ${play2.t.toFixed(2)}s${wrapped ? ' [loop]' : ''})`,
+    play1 !== null && heroAdv <= 0.45,
+    `hero avança sozinho, sem rolagem (esperado ${expectedDesk.toFixed(2)}s, lido ${play2.t.toFixed(2)}s, desvio ${heroAdv.toFixed(2)}s)`,
   )
 
   const layout = await page.evaluate(() => {
@@ -611,7 +626,7 @@ async function tabletPass(browser) {
 
   const res = await page.evaluate(() => performance.getEntriesByType('resource').map((e) => e.name))
   check(
-    res.some((n) => n.endsWith('/video/hero.mp4')) &&
+    res.some((n) => n.includes('/video/hero.mp4')) &&
       res.some((n) => n.endsWith('/video/hero-drone.mp4')) &&
       res.some((n) => n.endsWith('/video/rural.mp4')),
     'pré-carrega todos os 3 vídeos no tablet',
@@ -773,7 +788,7 @@ async function mobilePass(browser) {
   )
   check(
     mobRes.some((n) => n.endsWith('/video/hero-drone.mp4')) &&
-      mobRes.some((n) => n.endsWith('/video/hero.mp4')) &&
+      mobRes.some((n) => n.includes('/video/hero.mp4')) &&
       mobRes.some((n) => n.endsWith('/video/rural.mp4')),
     'pré-carrega todos os 3 vídeos também no celular',
   )
@@ -887,18 +902,20 @@ async function reducedPass(browser) {
     const v = document.querySelector('.hero .video-player__el')
     return v ? { t: v.currentTime, d: v.duration || 0 } : { t: 0, d: 0 }
   })
+  const rmAt = Date.now()
   await wait(2200)
   const hero = await page.evaluate(() => {
     const v = document.querySelector('.hero .video-player__el')
     return v ? { paused: v.paused, t: v.currentTime, d: v.duration || 0 } : null
   })
-  // clipe curto pode dar a volta do loop entre as leituras: delta contando o wrap
-  const rawHero = (hero?.t ?? 0) - t0.t
+  // clipe curto dá várias voltas na espera: compara com o tempo esperado (módulo duração)
   const heroDur = hero?.d || t0.d || 0
-  const heroAdv = rawHero < 0 && heroDur > 0 ? rawHero + heroDur : rawHero
+  const heroDev = loopAdvance(hero?.t ?? 0, t0.t, (Date.now() - rmAt) / 1000, heroDur)
+  const heroExpected =
+    heroDur > 0 ? (t0.t + (Date.now() - rmAt) / 1000) % heroDur : Number.NaN
   check(
-    !!hero && !hero.paused && heroAdv > 0.4,
-    `hero toca mesmo com prefers-reduced-motion (t ${t0.t.toFixed(2)}→${hero?.t.toFixed(2)}s${rawHero < 0 ? ' [loop]' : ''})`,
+    !!hero && !hero.paused && heroDev <= 0.45,
+    `hero toca mesmo com prefers-reduced-motion (esperado ${heroExpected.toFixed(2)}s, lido ${hero?.t.toFixed(2)}s, desvio ${heroDev.toFixed(2)}s)`,
   )
 
   await page.evaluate(() => document.querySelector('#rural')?.scrollIntoView())
