@@ -108,7 +108,7 @@ async function main() {
   const outVideo = path.join(root, 'public', 'video')
   await fs.mkdir(outVideo, { recursive: true })
   const videoPosters = [
-    [path.join(root, 'framesinicial', 'hero-2s-frame0.jpg'), 'hero-poster.webp'],
+    [path.join(root, 'framesinicial', 'hero-frame0.jpg'), 'hero-poster.webp'],
     [path.join(root, 'framesrural', 'ezgif-frame-120.jpg'), 'rural-poster.webp'],
   ]
   for (const [src, output] of videoPosters) {

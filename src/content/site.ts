@@ -23,9 +23,9 @@ export const brand = {
  */
 export const media = {
   hero: {
-    // desktop/tablet: paisagem 1280×720 — só os últimos 2s do original,
-    // loop nativo de 2s (48 quadros)
-    src: '/video/hero.mp4?v=2',
+    // desktop/tablet: paisagem 1280×720 — só os últimos 4s do original,
+    // loop nativo de 4s (96 quadros)
+    src: '/video/hero.mp4?v=3',
     poster: '/video/hero-poster.webp',
     // celular (≤620px): somente os últimos 4s do original (4,0–8,0s —
     // só o drone já voando), loop nativo; 1,35 MB
