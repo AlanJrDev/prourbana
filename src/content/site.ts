@@ -273,12 +273,14 @@ export const footer = {
       items: ['Brasília — DF', 'Goiás', 'Minas Gerais', 'Outras localidades sob consulta'],
     },
   ],
-  /** Coluna "Contato": telefone e e-mail escritos, clicáveis (tel:/mailto:). */
+  /** Coluna "Contato": mesmo padrão das outras colunas, com
+   *  telefone e e-mail escritos. Itens com href viram link. */
   contacts: {
     title: 'Contato',
-    links: [
-      { label: 'WhatsApp', value: whatsapp.display, href: `https://wa.me/${whatsapp.phone}` },
-      { label: 'E-mail', value: 'prourbanapci@gmail.com', href: 'mailto:prourbanapci@gmail.com' },
+    items: [
+      { text: `WhatsApp ${whatsapp.display}`, href: `https://wa.me/${whatsapp.phone}` },
+      { text: 'E-mail: prourbanapci@gmail.com', href: 'mailto:prourbanapci@gmail.com' },
+      { text: 'Instagram' },
     ],
   },
   legal: 'Prourbana Projetos e Consultoria Ltda — CNPJ 17.949.228/0001-25',

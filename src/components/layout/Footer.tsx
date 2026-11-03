@@ -43,19 +43,17 @@ export function Footer() {
           <div>
             <h3>{footer.contacts.title}</h3>
             <ul>
-              {footer.contacts.links.map((link) => (
-                <li key={link.label}>
-                  <a
-                    className="footer__contact-link"
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="footer__contact-label">{link.label}</span>
-                    <span className="footer__contact-value">{link.value}</span>
-                  </a>
-                </li>
-              ))}
+              {footer.contacts.items.map((item) =>
+                'href' in item ? (
+                  <li key={item.text}>
+                    <a href={item.href} target="_blank" rel="noopener noreferrer">
+                      {item.text}
+                    </a>
+                  </li>
+                ) : (
+                  <li key={item.text}>{item.text}</li>
+                ),
+              )}
             </ul>
           </div>
         </nav>
