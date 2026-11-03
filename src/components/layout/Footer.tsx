@@ -39,6 +39,25 @@ export function Footer() {
               </ul>
             </div>
           ))}
+
+          <div>
+            <h3>{footer.contacts.title}</h3>
+            <ul>
+              {footer.contacts.links.map((link) => (
+                <li key={link.label}>
+                  <a
+                    className="footer__contact-link"
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="footer__contact-label">{link.label}</span>
+                    <span className="footer__contact-value">{link.value}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       </div>
 

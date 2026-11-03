@@ -1932,6 +1932,39 @@ p {
   color: rgba(245, 241, 234, 0.66);
 }
 
+/* Contato do rodapé: link empilha rótulo + valor alinhados e
+   quebra o e-mail em telas estreitas sem estourar a coluna */
+.footer__contact-link {
+  display: inline-flex;
+  flex-direction: column;
+  min-height: 40px;
+  padding-block: 0.32rem;
+  color: rgba(245, 241, 234, 0.66);
+  transition: color 0.3s var(--ease);
+}
+
+.footer__contact-link:hover {
+  color: var(--copper-400);
+}
+
+.footer__contact-label {
+  font-family: var(--font-display);
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 234, 0.45);
+  transition: color 0.3s var(--ease);
+}
+
+.footer__contact-link:hover .footer__contact-label {
+  color: rgba(245, 241, 234, 0.66);
+}
+
+.footer__contact-value {
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
 .footer__nav {
   display: flex;
   flex-wrap: wrap;

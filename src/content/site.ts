@@ -272,11 +272,15 @@ export const footer = {
       title: 'Atendimento',
       items: ['Brasília — DF', 'Goiás', 'Minas Gerais', 'Outras localidades sob consulta'],
     },
-    {
-      title: 'Contato',
-      items: ['WhatsApp', 'E-mail', 'Instagram'],
-    },
   ],
+  /** Coluna "Contato": telefone e e-mail escritos, clicáveis (tel:/mailto:). */
+  contacts: {
+    title: 'Contato',
+    links: [
+      { label: 'WhatsApp', value: whatsapp.display, href: `https://wa.me/${whatsapp.phone}` },
+      { label: 'E-mail', value: 'prourbanapci@gmail.com', href: 'mailto:prourbanapci@gmail.com' },
+    ],
+  },
   legal: 'Prourbana Projetos e Consultoria Ltda — CNPJ 17.949.228/0001-25',
   rights: `© ${new Date().getFullYear()} ProUrbana Projetos e Consultoria Ltda. Todos os direitos reservados.`,
 } as const
