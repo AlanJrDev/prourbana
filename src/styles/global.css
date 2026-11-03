@@ -1579,8 +1579,9 @@ p {
 
 /* fundo animado: camada atrás do conteúdo — flutuação ociosa em CSS (não
    reage ao scroll) + parallax suave via GSAP na própria camada (profundidade);
-   pointer-events:none e opacidade preservam contraste; top/bottom -10% dão
-   folga pra camada não abrir borda durante o parallax */
+   pointer-events:none e tiers de opacidade preservam contraste; top/bottom
+   -10% dão folga pra camada não abrir borda durante o parallax; o mask-image
+   faz as formas nascerem/morrerem suaves nas bordas da seção */
 .portfolio__bg {
   position: absolute;
   left: 0;
@@ -1590,6 +1591,8 @@ p {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
 }
 
 .portfolio > .container,
@@ -1598,10 +1601,11 @@ p {
   z-index: 1;
 }
 
+/* flutuação HORIZONTAL: o vetor é por forma (vars inline no JSX) —
+   o conjunto desliza p/ a esquerda com pouco desvio vertical */
 .portfolio__shape {
   position: absolute;
   display: block;
-  opacity: 0.45;
   will-change: transform;
   animation: portfolio-float 30s ease-in-out infinite alternate;
 }
@@ -1613,18 +1617,60 @@ p {
   overflow: visible;
 }
 
+/* tiers de profundidade: frente nítida e presente, meio suave,
+   fundo vagando desfocado atrás de tudo */
+.portfolio__shape--front {
+  opacity: 0.5;
+}
+
+.portfolio__shape--mid {
+  opacity: 0.32;
+}
+
+.portfolio__shape--back {
+  opacity: 0.2;
+  filter: blur(2px);
+}
+
+/* anel girando devagar: o arco de brilho corre o perímetro —
+   vida sutil, sem virar ruído */
+.portfolio__shape--ring svg {
+  animation: portfolio-spin 72s linear infinite;
+}
+
 @keyframes portfolio-float {
   from {
     transform: translate3d(0, 0, 0) rotate(0deg);
   }
   to {
-    transform: translate3d(14px, -26px, 0) rotate(12deg);
+    transform: translate3d(var(--fx, -40px), var(--fy, 8px), 0) rotate(var(--fr, -9deg));
+  }
+}
+
+@keyframes portfolio-spin {
+  to {
+    rotate: 360deg;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .portfolio__shape {
+  .portfolio__shape,
+  .portfolio__shape--ring svg {
     animation: none;
+  }
+}
+
+/* mobile: o tier de fundo some e o resto encolhe — as fotos
+   não brigam com o fundo em tela estreita */
+@media (max-width: 620px) {
+  .portfolio__shape--back {
+    display: none;
+  }
+
+  .portfolio__shape--mid,
+  .portfolio__shape--front {
+    max-width: 88px;
+    max-height: 88px;
   }
 }
 

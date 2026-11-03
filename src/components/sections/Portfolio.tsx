@@ -25,6 +25,18 @@ const BG_COLORS = [
   'var(--copper-400)',
 ] as const
 
+/** Vetores de flutuação HORIZONTAL (direita → esquerda), por índice: o
+ *  deslocamento é sempre negativo no eixo x; o y e a rotação variam pouco.
+ *  Determinístico — mesma lista em qualquer tela, sem aleatório. */
+const DRIFTS = [
+  { fx: -40, fy: 8, fr: -9 },
+  { fx: -34, fy: -6, fr: 7 },
+  { fx: -52, fy: 4, fr: 11 },
+  { fx: -38, fy: -10, fr: -6 },
+  { fx: -46, fy: 6, fr: 8 },
+  { fx: -32, fy: 10, fr: -12 },
+] as const
+
 /** Formas do fundo: quadra redonda, triângulo, anel e cruz — com extrusão/
  *  faces sombreadas no SVG pra parecerem 3D. Posição/tamanho fixos (sem
  *  aleatório); flutuação é CSS, profundidade é parallax. */
@@ -177,23 +189,35 @@ export function Portfolio() {
   return (
     <section className="portfolio section" id="portfolio">
       <div className="portfolio__bg" ref={bgRef} aria-hidden="true">
-        {BG_SHAPES.map((shape) => (
-          <i
-            key={`${shape.l}-${shape.t}`}
-            className={`portfolio__shape portfolio__shape--${shape.k}`}
-            style={{
-              left: `${shape.l}%`,
-              top: `${shape.t}%`,
-              width: shape.s,
-              height: shape.s,
-              color: BG_COLORS[shape.c],
-              animationDuration: `${shape.d}s`,
-              animationDelay: `-${shape.d / 3}s`,
-            }}
-          >
-            <ShapeArt k={shape.k} />
-          </i>
-        ))}
+        {BG_SHAPES.map((shape, i) => {
+          // tier de profundidade por tamanho: frente nítida, meio suave,
+          // fundo vaga e desfocado — dá leitura real de camadas
+          const tier = shape.s >= 96 ? 'back' : shape.s >= 66 ? 'mid' : 'front'
+          const drift = DRIFTS[i % DRIFTS.length]
+          const delay = -((i * 1.93) % shape.d)
+          return (
+            <i
+              key={`${shape.l}-${shape.t}`}
+              className={`portfolio__shape portfolio__shape--${shape.k} portfolio__shape--${tier}`}
+              style={
+                {
+                  left: `${shape.l}%`,
+                  top: `${shape.t}%`,
+                  width: shape.s,
+                  height: shape.s,
+                  color: BG_COLORS[shape.c],
+                  '--fx': `${drift.fx}px`,
+                  '--fy': `${drift.fy}px`,
+                  '--fr': `${drift.fr}deg`,
+                  animationDelay: `${delay}s`,
+                  animationDuration: `${shape.d}s`,
+                } as React.CSSProperties
+              }
+            >
+              <ShapeArt k={shape.k} />
+            </i>
+          )
+        })}
       </div>
 
       <div className="container">
